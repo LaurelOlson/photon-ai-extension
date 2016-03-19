@@ -26,7 +26,11 @@
         "https://*/*"
       ],
       "js": [
+        "bower_components/jquery/dist/jquery.js",
         "scripts/contentscript.js"
+      ],
+      "css": [
+        "styles/image-hover.css"
       ],
       "run_at": "document_end",
       "all_frames": false
@@ -37,7 +41,7 @@
       "19": "images/icon-19.png",
       "38": "images/icon-38.png"
     },
-    "default_title": "photon ai extension",
+    "default_title": "photon_ai_ext",
     "default_popup": "popup.html"
   }
 }
