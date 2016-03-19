@@ -1,4 +1,4 @@
-// generated on 2016-03-19 using generator-chrome-extension 0.5.4
+// generated on 2016-03-18 using generator-chrome-extension 0.5.4
 import gulp from 'gulp';
 import gulpLoadPlugins from 'gulp-load-plugins';
 import del from 'del';
@@ -122,7 +122,7 @@ gulp.task('wiredep', () => {
 gulp.task('package', function () {
   var manifest = require('./dist/manifest.json');
   return gulp.src('dist/**')
-      .pipe($.zip('photon ai extension-' + manifest.version + '.zip'))
+      .pipe($.zip('photon_ai_ext-' + manifest.version + '.zip'))
       .pipe(gulp.dest('package'));
 });
 
