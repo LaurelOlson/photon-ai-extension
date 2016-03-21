@@ -6,6 +6,4 @@ dist
 app/bower_components
 test/bower_components
 package
-
-app/styles
 npm-debug.log
