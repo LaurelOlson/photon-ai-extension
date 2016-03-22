@@ -7,11 +7,21 @@
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css styles/main.css -->
-    <link href="styles/main.css" rel="stylesheet">
+    <link href="styles.scss/main.scss" rel="stylesheet">
     <!-- endbuild -->
   </head>
   <body>
-    <h1>Login Form</h1>
+    <section class="loginform cf">
+    <form name="login" action="index_submit" method="get" accept-charset="utf-8">
+        <h3>Don't hit the keys so hard. It hurts.</h3>
+        <hr></hr>
+            <!-- <label for="usermail">Email</label> -->
+            <input type="email" name="usermail" placeholder="Email" required>
+            <!-- <label for="password">Password</label> -->
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="submit" class="button-link" value="Login">
+    </form>
+    </section>
 
     <!-- build:js scripts/popup-vendor.js -->
     <!-- bower:js -->
