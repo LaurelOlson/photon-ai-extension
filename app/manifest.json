@@ -27,10 +27,10 @@
       ],
       "js": [
         "bower_components/jquery/dist/jquery.js",
-        "scripts/contentscript.js"
+        "./embeds/photon-flickr.js"
       ],
       "css": [
-        "styles/image-hover.css"
+        "./embeds/photon-flickr.css"
       ],
       "run_at": "document_end",
       "all_frames": false
