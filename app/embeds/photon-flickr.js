@@ -1,40 +1,60 @@
 'use strict';
 
-// $(window).on('load', function() {
-  $(function() { 
-    // restrict image size
-    const MAX_WIDTH = 100;
-    const MAX_HEIGHT = 100;
-
-    var outerDiv = $('<div>').addClass('outer');
-    var hoverDiv = $('<div>').addClass('hover-div');
-    var addPhotoButton = $('<input>')
-        .addClass('addPhotoButton')
-        .attr({type: 'button', value: 'add photo'})
-        .appendTo(hoverDiv);
+$(function(){
     
-    // for general img tags
-    // img tag needs to be wrapped in outer div before appending for some reason..
+    function addZeButton($imgDiv) {
+        $imgDiv.prepend($('<button>', {class: 'photon-button'}).text('photon').css({
+            'position': 'absolute',
+            'top': '3px',
+            'right': '3px',
+            'z-index': '52'
+            })
+        ); 
+    }
+
+    function cleanUpStyle(styleAttrib) {
+        var parts = styleAttrib.split("; ")
+        var obj = {}
+        for (var i = 0; i < parts.length; i++) {
+          var subParts = parts[i].split(': ');
+          obj[subParts[0]]=subParts[1];
+        }
+        return obj;
+    }
+
+    function getStyleOfImg($imgDiv) {
+        var styleAttrib = $imgDiv.attr('style');
+        var cleanStyle = cleanUpStyle(styleAttrib);
+    }
+
+    //Body selector case for images wrapped in 'a' tags
+    $('body').on('mouseenter', '.overlay', function() {
+        var $imgDiv = $(this).closest('.photo-list-photo-interaction');
+        if ($imgDiv.find('.photon-button').length != 0) {
+            return;
+        } else {
+            addZeButton($imgDiv);
+        }
+    });
+
+    // $('body').on('mouseleave', '.overlay', function() {
+    //     $(".photon-button").remove();
+    // });
+
+    //Img selector case for images actually stored in img tags
+
     var images = $('img');
-    var mainImages = images.filter(function(index, image) { 
-        return (image.clientWidth > MAX_WIDTH && image.clientHeight > MAX_HEIGHT) 
-    });
-    mainImages.wrap(outerDiv);
-    $('.outer').append(hoverDiv);
 
-    // var imageLinks = $('.photo-list-photo-view');
-    var imageLinks = $('.interaction-view');
-    // imageLinks.append(hoverDiv);
-    imageLinks.mouseenter(function() {
-        $(this).append(hoverDiv);
+    $('img').on('mouseenter', function() {
+        var $imgDiv = $(this).closest('.photo_container');
+        if (!$imgDiv) {
+            console.log('test passed');
+            addZeButton($imgDiv);
+        }
     });
 
-    imageLinks.mouseleave(function() {
-        $(this).find(hoverDiv).remove();
+    $('img').on('mouseleave', function() {
+        $("button:contains('photon')").remove();
     });
 
-    // for flickr (appends hoverDiv to <span>)
-    var flickr_photos = $('.thin-facade');
-    flickr_photos.append(hoverDiv);
-  // });
-}());
+});
