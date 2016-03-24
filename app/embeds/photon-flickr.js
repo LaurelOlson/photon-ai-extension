@@ -27,6 +27,14 @@ $(function(){
         var cleanStyle = cleanUpStyle(styleAttrib);
     }
 
+    function createPhotoUrl(styleAttrib) {
+        var cleanStyle = cleanUpStyle(styleAttrib);
+        var photoUrl = cleanStyle['background-image'];
+        var linkLinter = /\(([^\)]+)\)/;
+        var theLink = (((photoUrl.match(linkLinter)[1]).replace(/"/g, "")).replace(/.jpg/g, "").replace(/_.*/g, ""));
+        return theLink + '_b.jpg';
+    }
+
     //Body selector case for images wrapped in 'a' tags
     $('body').on('mouseenter', '.overlay', function() {
         var $imgDiv = $(this).closest('.photo-list-photo-interaction');
@@ -35,13 +43,14 @@ $(function(){
         } else {
             addZeButton($imgDiv);
         }
+
+        $imgDiv.find('.photon-button').one('click', function() {
+            var styleAttrib = $imgDiv.closest('.photo-list-photo-view').attr('style');
+            var imagePath = createPhotoUrl(styleAttrib);
+
+            console.log('https:' + imagePath);
+        })
     });
-
-    // $('body').on('mouseleave', '.overlay', function() {
-    //     $(".photon-button").remove();
-    // });
-
-    //Img selector case for images actually stored in img tags
 
     var images = $('img');
 
