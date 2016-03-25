@@ -17,7 +17,8 @@
   "permissions": [
     "tabs",
     "http://*/*",
-    "https://*/*"
+    "https://*/*",
+    "https://localhost/*"
   ],
   "content_scripts": [
     {

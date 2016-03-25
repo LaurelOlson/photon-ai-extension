@@ -70,7 +70,16 @@ $(function(){
                 imagePath = imagePath.replace(/(_[a-z])(\.jpg+)$/g, "");
             }
 
-            console.log('https:' + imagePath + '_b.jpg');
+            imagePath = ('https:' + imagePath + '_b.jpg');
+
+            $.ajax ({
+                url: 'https://localhost:3000/user/1/addedphotos',
+                method: 'POST',
+                data: {url: imagePath}
+                })
+                .done(function(msg) {
+                    console.log('We did it!');
+                });
         })
     });
 
