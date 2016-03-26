@@ -1,3 +1,11 @@
 'use strict';
 
-console.log('\'Allo \'Allo! Popup');
+
+$('#clickme').on('click', function () {
+  $.ajax ({
+    type: 'GET',
+    url: 'SomeroutethatLaurelwillmake',
+    dataType: 'json',
+    
+  })
+});

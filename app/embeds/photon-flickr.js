@@ -48,6 +48,32 @@ $(function(){
         }
     }
 
+    function getNativeDimensions(imagePath, callback) {
+        var completePath = 'https:' + imagePath + '_b.jpg';
+        var output = {
+            url: completePath,
+            width: 0,
+            height: 0
+        };
+        var $img = $('<img>').attr({
+            src: completePath,
+            id: 'photonParseSizeTarget'
+        });
+        $img.css({
+            'visibility': 'hidden',
+            'position': 'fixed',
+            'z-index': '-100'
+        });
+        $('body').append($img);
+        $img.on('load', function(){
+            var $zeImg = $(this);
+            output.width = $zeImg.width();
+            output.height = $zeImg.height();
+            $(this).remove();
+            callback(output);
+        });
+    }
+
 
 
     // Body selector case for images wrapped in 'a' tags
@@ -60,7 +86,8 @@ $(function(){
         }
 
         $imgDiv.find('.photon-button').one('click', function() {
-            var styleAttrib = $imgDiv.closest('.photo-list-photo-view').attr('style');
+            var zeElem = $imgDiv.closest('.photo-list-photo-view');
+            var styleAttrib = zeElem.attr('style');
             var imagePath = (createPhotoUrl(styleAttrib).replace(/"/g, ""));
 
             //If image path has more than one _, then this link.replace(/_.$/g, ""))
@@ -70,16 +97,20 @@ $(function(){
                 imagePath = imagePath.replace(/(_[a-z])(\.jpg+)$/g, "");
             }
 
-            imagePath = ('https:' + imagePath + '_b.jpg');
+            function parseImg(imgObj){
+                console.log(imgObj);
+            }
 
-            $.ajax ({
-                url: 'https://localhost:3000/user/1/addedphotos',
-                method: 'POST',
-                data: {url: imagePath}
-                })
-                .done(function(msg) {
-                    console.log('We did it!');
-                });
+            getNativeDimensions(imagePath, parseImg);
+
+            // $.ajax ({
+            //     url: 'https://localhost:3000/user/1/addedphotos',
+            //     method: 'POST',
+            //     data: {url: imagePath}
+            //     })
+            //     .done(function(msg) {
+            //         console.log('We did it!');
+            //     });
         })
     });
 

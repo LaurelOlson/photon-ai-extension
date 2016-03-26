@@ -35,6 +35,36 @@
       ],
       "run_at": "document_end",
       "all_frames": false
+    },
+    {
+      "matches": [
+        "https://*.flickr.com/*",
+        "https://*.staticflickr.com/*"
+      ],
+      "js": [
+        "bower_components/jquery/dist/jquery.js",
+        "./embeds/photon-flickr.js"
+      ],
+      "css": [
+        "./embeds/photon-flickr.css"
+      ],
+      "run_at": "document_end",
+      "all_frames": false
+    },
+    {
+      "matches": [
+        "https://*.500px.com/*",
+        "https://*.500px.org/*"
+      ],
+      "js": [
+        "bower_components/jquery/dist/jquery.js",
+        "./embeds/photon-500px.js"
+      ],
+      "css": [
+        "./embeds/photon-flickr.css"
+      ],
+      "run_at": "document_end",
+      "all_frames": false
     }
   ],
   "browser_action": {
@@ -42,7 +72,14 @@
       "19": "images/icon-19.png",
       "38": "images/icon-38.png"
     },
+
+    "background": {
+      "scripts": "popup.js",
+      "persistent" : false
+    },
+
     "default_title": "photon_ai_ext",
     "default_popup": "popup.html"
-  }
+    }
+
 }

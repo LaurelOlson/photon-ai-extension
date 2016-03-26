@@ -13,10 +13,10 @@
   z-index: 52;
 }
 
-.hover-div:hover {
-  opacity: 1;
+.photon-button {
+  float: right;
 }
 
-.addPhotoButton {
-  float: right;
+.hover-div:hover {
+  opacity: 1;
 }
