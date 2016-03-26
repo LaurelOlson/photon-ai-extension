@@ -8,13 +8,13 @@ $(function(){
             'top': '3px',
             'right': '3px',
             'z-index': '52'
-            })
+            });
         ); 
     }
 
     function cleanUpStyle(styleAttrib) {
-        var parts = styleAttrib.split("; ")
-        var obj = {}
+        var parts = styleAttrib.split("; ");
+        var obj = {};
         for (var i = 0; i < parts.length; i++) {
           var subParts = parts[i].split(': ');
           obj[subParts[0]]=subParts[1];
@@ -22,18 +22,13 @@ $(function(){
         return obj;
     }
 
-    function getStyleOfImg($imgDiv) {
-        var styleAttrib = $imgDiv.attr('style');
-        var cleanStyle = cleanUpStyle(styleAttrib);
-    }
-
     // Handles Flickr's weird way of embedding the img URL in the css code
     function createPhotoUrl(styleAttrib) {
         var cleanStyle = cleanUpStyle(styleAttrib);
         var photoUrl = cleanStyle['background-image'];
         var linkLinter = /\(([^\)]+)\)/;
-        var theLink = ((photoUrl.match(linkLinter)[1]))
-        return theLink
+        var theLink = ((photoUrl.match(linkLinter)[1]));
+        return theLink;
     }
 
     // Determines if last underscore in url before .jpg is part of path or just an image size modifier
@@ -126,7 +121,9 @@ $(function(){
     var outerDiv = $('<div>').addClass('outer');
 
     var hoverDiv = $('<div>').addClass('hover-div');
-    var addPhotoButton = $('<input>', {class: 'photon-button'}).attr({type: 'button', value: 'add photo'}).appendTo(hoverDiv);
+    var addPhotoButton = $('<input>', {class: 'photon-button'}).attr({type: 'button', value: 'add photo'});
+
+    addPhotoButton.appendTo(hoverDiv);
 
     // Only applies to images that are a certain size aka not thumb-nails
     var mainImages = images.filter(function(i, image) { return (image.clientWidth > MAX_WIDTH && image.clientHeight > MAX_HEIGHT) });
