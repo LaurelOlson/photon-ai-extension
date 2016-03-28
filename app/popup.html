@@ -12,14 +12,14 @@
   </head>
   <body>
     <section class="loginform cf">
-    <form name="login" action="index_submit" method="get" accept-charset="utf-8">
+    <form name="login" id="login" action="index_submit" method="post" accept-charset="utf-8">
         <h3>Don't hit the keys so hard. It hurts.</h3>
         <hr></hr>
             <!-- <label for="usermail">Email</label> -->
-            <input type="email" name="usermail" placeholder="Email" required>
+            <input type="email" id="email" name="useremail" placeholder="Email" required>
             <!-- <label for="password">Password</label> -->
-            <input type="password" name="password" placeholder="Password" required>
-            <input type="submit" class="button-link" value="Login">
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            <input id="clickme" type="submit" class="button-link" value="Login">
     </form>
     </section>
 
@@ -29,7 +29,11 @@
     <!-- endbuild -->
 
     <!-- build:js scripts/popup.js -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="scripts/popup.js"></script>
+    <script type="text/javascript" src="chrome_ex_oauthsimple.js"></script>
+    <script type="text/javascript" src="chrome_ex_oauth.js"></script>
+    <script type="text/javascript" src="onload.js"></script>
     <!-- endbuild -->
   </body>
 </html>
