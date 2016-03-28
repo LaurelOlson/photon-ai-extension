@@ -51,6 +51,7 @@
         "https://*.staticflickr.com/*"
       ],
       "js": [
+        "bower_components/jquery/dist/jquery.js",
         "./embeds/photon-flickr.js"
       ],
       "css": [
