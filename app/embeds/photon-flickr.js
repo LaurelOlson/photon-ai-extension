@@ -3,7 +3,7 @@
 $(function(){
     
     function addZeButton($imgDiv) {
-        $imgDiv.prepend($('<div>', {class: 'photon-button custom-icon-button'})
+        $imgDiv.prepend($('<div>', {class: 'custom-icon-button'})
         ); 
     }
 
@@ -65,13 +65,13 @@ $(function(){
     // Body selector case for images wrapped in 'a' tags
     $('body').on('mouseenter', '.overlay', function() {
         var $imgDiv = $(this).closest('.photo-list-photo-interaction');
-        if ($imgDiv.find('.photon-button').length != 0) {
+        if ($imgDiv.find('.custom-icon-button').length != 0) {
             return;
         } else {
             addZeButton($imgDiv);
         }
 
-        $imgDiv.find('.photon-button').one('click', function() {
+        $imgDiv.find('.custom-icon-button').one('click', function() {
             var zeElem = $imgDiv.closest('.photo-list-photo-view');
             var styleAttrib = zeElem.attr('style');
             var imagePath = (createPhotoUrl(styleAttrib).replace(/"/g, ""));
@@ -112,7 +112,7 @@ $(function(){
     var outerDiv = $('<div>').addClass('outer');
 
     var hoverDiv = $('<div>').addClass('hover-div');
-    var addPhotoButton = $('<div>', {class: 'photon-button custom-icon-button'}).attr({type: 'button', value: 'add photo'});
+    var addPhotoButton = $('<div>', {class: 'custom-icon-button'}).attr({type: 'button', value: 'add photo'});
 
     addPhotoButton.appendTo(hoverDiv);
 
@@ -121,7 +121,7 @@ $(function(){
     mainImages.wrap(outerDiv);
     $('.outer').append(hoverDiv);
          
-    $('.hover-div').one('click', '.photon-button', function(evt) {
+    $('.hover-div').one('click', '.custom-icon-button', function(evt) {
         evt.preventDefault();
         var imageLink = $(this).closest('.outer').children('img').attr('src');
         imageLink = imageLink.replace(/"/g, "");
