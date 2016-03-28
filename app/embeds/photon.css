@@ -21,12 +21,6 @@
   opacity: 1;
 }
 
-.make-invis {
-  visibility: 'hidden';
-  position: 'fixed';
-  z-index: '-100';
-}
-
 .custom-icon-button {
   background-image: url('chrome-extension://hijnoccjmdgleaafippfiocophahkhkl/images/logo-32.png');
   background-repeat: no-repeat;

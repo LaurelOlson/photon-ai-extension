@@ -4,8 +4,8 @@
   "manifest_version": 2,
   "description": "__MSG_appDescription__",
   "icons": {
-    "16": "images/icon-16.png",
-    "128": "images/icon-128.png"
+    "16": "images/logo-16.png",
+    "128": "images/logo-128.png"
   },
   "default_locale": "en",
   "background": {
@@ -15,10 +15,15 @@
     ]
   },
   "permissions": [
-    "tabs",
+    "identity",
+    "https://www.facebook.com/",
+    "https://graph.facebook.com/",
     "http://*/*",
     "https://*/*",
     "https://localhost/*"
+  ],
+  "web_accessible_resources": [
+    "images/*"
   ],
   "content_scripts": [
     {
@@ -28,10 +33,10 @@
       ],
       "js": [
         "bower_components/jquery/dist/jquery.js",
-        "./embeds/photon-flickr.js"
+        "./embeds/photon.js"
       ],
       "css": [
-        "./embeds/photon-flickr.css"
+        "./embeds/photon.css"
       ],
       "run_at": "document_end",
       "all_frames": false
@@ -42,7 +47,6 @@
         "https://*.staticflickr.com/*"
       ],
       "js": [
-        "bower_components/jquery/dist/jquery.js",
         "./embeds/photon-flickr.js"
       ],
       "css": [
@@ -58,10 +62,10 @@
       ],
       "js": [
         "bower_components/jquery/dist/jquery.js",
-        "./embeds/500px.js"
+        "./embeds/photon-500px.js"
       ],
       "css": [
-        "./embeds/photon-flickr.css"
+        "./embeds/photon-500px.css"
       ],
       "run_at": "document_end",
       "all_frames": false
@@ -69,8 +73,8 @@
   ],
   "browser_action": {
     "default_icon": {
-      "19": "images/icon-19.png",
-      "38": "images/icon-38.png"
+      "19": "images/logo-19.png",
+      "38": "images/logo-38.png"
     },
 
     "background": {

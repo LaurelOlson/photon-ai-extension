@@ -3,12 +3,7 @@
 $(function(){
     
     function addZeButton($imgDiv) {
-        $imgDiv.prepend($('<button>', {class: 'photon-button'}).text('photon').css({
-            'position': 'absolute',
-            'top': '3px',
-            'right': '3px',
-            'z-index': '52'
-            })
+        $imgDiv.prepend($('<div>', {class: 'custom-icon-button'})
         ); 
     }
 
@@ -21,11 +16,6 @@ $(function(){
         }
         return obj;
     }
-
-    // function getStyleOfImg($imgDiv) {
-    //     var styleAttrib = $imgDiv.attr('style');
-    //     var cleanStyle = cleanUpStyle(styleAttrib);
-    // }
 
     // Handles Flickr's weird way of embedding the img URL in the css code
     function createPhotoUrl(styleAttrib) {
@@ -60,11 +50,7 @@ $(function(){
             src: completePath,
             id: 'photonParseSizeTarget'
         });
-        $img.css({
-            'visibility': 'hidden',
-            'position': 'fixed',
-            'z-index': '-100'
-        });
+        $img.addClass('make-invis');
         $('body').append($img);
         $img.on('load', function(){
             var $zeImg = $(this);
@@ -79,13 +65,13 @@ $(function(){
     // Body selector case for images wrapped in 'a' tags
     $('body').on('mouseenter', '.overlay', function() {
         var $imgDiv = $(this).closest('.photo-list-photo-interaction');
-        if ($imgDiv.find('.photon-button').length !== 0) {
+        if ($imgDiv.find('.custom-icon-button').length != 0) {
             return;
         } else {
             addZeButton($imgDiv);
         }
 
-        $imgDiv.find('.photon-button').one('click', function() {
+        $imgDiv.find('.custom-icon-button').one('click', function() {
             var zeElem = $imgDiv.closest('.photo-list-photo-view');
             var styleAttrib = zeElem.attr('style');
             var imagePath = (createPhotoUrl(styleAttrib).replace(/"/g, ""));
@@ -130,14 +116,16 @@ $(function(){
     var outerDiv = $('<div>').addClass('outer');
 
     var hoverDiv = $('<div>').addClass('hover-div');
-    var addPhotoButton = $('<input>', {class: 'photon-button'}).attr({type: 'button', value: 'add photo'}).appendTo(hoverDiv);
+    var addPhotoButton = $('<div>', {class: 'custom-icon-button'}).attr({type: 'button', value: 'add photo'});
+
+    addPhotoButton.appendTo(hoverDiv);
 
     // Only applies to images that are a certain size aka not thumb-nails
     var mainImages = images.filter(function(i, image) { return (image.clientWidth > MAX_WIDTH && image.clientHeight > MAX_HEIGHT); });
     mainImages.wrap(outerDiv);
     $('.outer').append(hoverDiv);
          
-    $('.hover-div').one('click', '.photon-button', function(evt) {
+    $('.hover-div').one('click', '.custom-icon-button', function(evt) {
         evt.preventDefault();
         var imageLink = $(this).closest('.outer').children('img').attr('src');
         imageLink = imageLink.replace(/"/g, "");
