@@ -58,7 +58,7 @@
       ],
       "js": [
         "bower_components/jquery/dist/jquery.js",
-        "./embeds/photon-500px.js"
+        "./embeds/500px.js"
       ],
       "css": [
         "./embeds/photon-flickr.css"

@@ -13,8 +13,8 @@ $(function(){
     }
 
     function cleanUpStyle(styleAttrib) {
-        var parts = styleAttrib.split("; ")
-        var obj = {}
+        var parts = styleAttrib.split("; ");
+        var obj = {};
         for (var i = 0; i < parts.length; i++) {
           var subParts = parts[i].split(': ');
           obj[subParts[0]]=subParts[1];
@@ -22,30 +22,31 @@ $(function(){
         return obj;
     }
 
-    function getStyleOfImg($imgDiv) {
-        var styleAttrib = $imgDiv.attr('style');
-        var cleanStyle = cleanUpStyle(styleAttrib);
-    }
+    // function getStyleOfImg($imgDiv) {
+    //     var styleAttrib = $imgDiv.attr('style');
+    //     var cleanStyle = cleanUpStyle(styleAttrib);
+    // }
 
     // Handles Flickr's weird way of embedding the img URL in the css code
     function createPhotoUrl(styleAttrib) {
         var cleanStyle = cleanUpStyle(styleAttrib);
         var photoUrl = cleanStyle['background-image'];
         var linkLinter = /\(([^\)]+)\)/;
-        var theLink = ((photoUrl.match(linkLinter)[1]))
-        return theLink
+        var theLink = ((photoUrl.match(linkLinter)[1]));
+        return theLink;
     }
 
     // Determines if last underscore in url before .jpg is part of path or just an image size modifier
-    function checkIfUnderscoreIsPath(imagePath) {
+    function underscoreIsPath(imagePath) {
        var underScoreFragment = imagePath.substring(imagePath.lastIndexOf("_") + 1, imagePath.lastIndexOf("."));
 
         // Flickr uses convention _ +  a letter to resize images via url
-        if (underScoreFragment.length > 1) {
-            return true;
-        } else {
-            return false;
-        }
+        return underScoreFragment.length > 1;
+        // if (underScoreFragment.length > 1) {
+        //     return true;
+        // } else {
+        //     return false;
+        // }
     }
 
     function getNativeDimensions(imagePath, callback) {
@@ -69,17 +70,16 @@ $(function(){
             var $zeImg = $(this);
             output.width = $zeImg.width();
             output.height = $zeImg.height();
+            // console.log(output);
             $(this).remove();
             callback(output);
         });
     }
 
-
-
     // Body selector case for images wrapped in 'a' tags
     $('body').on('mouseenter', '.overlay', function() {
         var $imgDiv = $(this).closest('.photo-list-photo-interaction');
-        if ($imgDiv.find('.photon-button').length != 0) {
+        if ($imgDiv.find('.photon-button').length !== 0) {
             return;
         } else {
             addZeButton($imgDiv);
@@ -91,14 +91,18 @@ $(function(){
             var imagePath = (createPhotoUrl(styleAttrib).replace(/"/g, ""));
 
             //If image path has more than one _, then this link.replace(/_.$/g, ""))
-            if (checkIfUnderscoreIsPath(imagePath)) {
+            if (underscoreIsPath(imagePath)) {
                 imagePath = imagePath.replace(/\.jpg/g, "");
             } else {
                 imagePath = imagePath.replace(/(_[a-z])(\.jpg+)$/g, "");
             }
 
             function parseImg(imgObj){
-                console.log(imgObj);
+                // console.log(imgObj);
+                chrome.runtime.sendMessage({ url: imgObj.url, width: imgObj.width, height: imgObj.height }, function(response) {
+                    console.log(response);
+                });
+                // console.log(imgObj);
             }
 
             getNativeDimensions(imagePath, parseImg);
@@ -111,7 +115,7 @@ $(function(){
             //     .done(function(msg) {
             //         console.log('We did it!');
             //     });
-        })
+        });
     });
 
     // This handles regular images on the website
@@ -129,7 +133,7 @@ $(function(){
     var addPhotoButton = $('<input>', {class: 'photon-button'}).attr({type: 'button', value: 'add photo'}).appendTo(hoverDiv);
 
     // Only applies to images that are a certain size aka not thumb-nails
-    var mainImages = images.filter(function(i, image) { return (image.clientWidth > MAX_WIDTH && image.clientHeight > MAX_HEIGHT) });
+    var mainImages = images.filter(function(i, image) { return (image.clientWidth > MAX_WIDTH && image.clientHeight > MAX_HEIGHT); });
     mainImages.wrap(outerDiv);
     $('.outer').append(hoverDiv);
          
@@ -138,7 +142,7 @@ $(function(){
         var imageLink = $(this).closest('.outer').children('img').attr('src');
         imageLink = imageLink.replace(/"/g, "");
 
-        if (checkIfUnderscoreIsPath(imageLink)) {
+        if (underscoreIsPath(imageLink)) {
             imageLink = imageLink.replace(/\.jpg/g, "");
         } else {
             imageLink = imageLink.replace(/(_[a-z])(\.jpg+)$/g, "");
