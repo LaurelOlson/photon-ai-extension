@@ -8,6 +8,12 @@
 
 
 $(function(){
+
+    // chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) { 
+    //     console.log('got msg');
+    //     // var user_id = req.user_id;  
+    //     // return user_id;
+    // });
     
     function addZeButton($imgDiv) {
         $imgDiv.prepend($('<div>', {class: 'custom-icon-button'})
