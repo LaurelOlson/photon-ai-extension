@@ -15,10 +15,15 @@
     ]
   },
   "permissions": [
-    "tabs",
+    "identity",
+    "https://www.facebook.com/",
+    "https://graph.facebook.com/",
     "http://*/*",
     "https://*/*",
     "https://localhost/*"
+  ],
+  "web_accessible_resources": [
+    "images/*"
   ],
   "content_scripts": [
     {
@@ -28,10 +33,10 @@
       ],
       "js": [
         "bower_components/jquery/dist/jquery.js",
-        "./embeds/photon-flickr.js"
+        "./embeds/photon.js"
       ],
       "css": [
-        "./embeds/photon-flickr.css"
+        "./embeds/photon.css"
       ],
       "run_at": "document_end",
       "all_frames": false
@@ -42,7 +47,6 @@
         "https://*.staticflickr.com/*"
       ],
       "js": [
-        "bower_components/jquery/dist/jquery.js",
         "./embeds/photon-flickr.js"
       ],
       "css": [
@@ -57,11 +61,10 @@
         "https://*.500px.org/*"
       ],
       "js": [
-        "bower_components/jquery/dist/jquery.js",
         "./embeds/photon-500px.js"
       ],
       "css": [
-        "./embeds/photon-flickr.css"
+        "./embeds/photon-500px.css"
       ],
       "run_at": "document_end",
       "all_frames": false

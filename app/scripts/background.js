@@ -12,6 +12,12 @@
 //   alert("Hello world");
 // });
 
+// document.getElementById('clickme').addEventListener('click', function() {
+//   chrome.tabs.executeScript({
+//     file: 'login.js'
+//   });
+// });
+
 document.getElementById('clickme').addEventListener('click', function() {
   chrome.tabs.executeScript({
     file: 'login.js'

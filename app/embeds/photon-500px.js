@@ -1,30 +1,60 @@
 $(function() {
 
+  const logoWidth = 32;
+  const horizontalDistanceFromWindow = 11;
+  const verticalDistanceFromWindow = 2;
+
   function addZeButton($imgLink) {
-    $imgLink.prepend($('<button>', {class: 'photon-button'}).text('photon').css({
-        'position': 'absolute',
-        'top': '3px',
-        'left': '3px',
-        'z-index': '52'
-        })
-    ); 
+
+    var newButton = $imgLink.prepend($('<div>', {class: 'custom-icon-button'})); 
   }
+
 
   $('body').on('mouseenter', '.photo_link', function() {
     var $imgLink = $(this).siblings('.photo_thumbnail__pulse_container');
-    if ($imgLink.find('.photon-button').length != 0) {
+    if ($imgLink.find('.custom-icon-button').length != 0) {
         return;
     } else {
         addZeButton($imgLink);
     }
-    $imgLink.children('.photon-button').one('click', function() {
 
+    $imgLink.children('.custom-icon-button').one('click', function() {
       // No idea why but couldn't traverse DOM the regular way...
       var imgUrl = $imgLink.closest('.photo_link').context.firstElementChild.currentSrc;
-      console.log(imgUrl);
-
+      console.log(imgUrl); 
     });
     
   });
-});
 
+
+  $('body').on('mouseenter', '.link', function() {
+
+    var $imgLink = $(this).siblings('.buttons');
+    if ($imgLink.find('.custom-icon-button').length != 0) {
+        return;
+    } 
+    else {
+      addZeButton($imgLink);
+      $imgLink.find('.custom-icon-button').css({
+        'top': '-10px',
+        'right': ($(this).width() - logoWidth - horizontalDistanceFromWindow) + 'px'
+      });
+    }
+
+  });
+
+  $('body').on('mouseenter', '.photo_link', function () {
+    var $imgLink = $(this).siblings ('.info');
+    if ($imgLink.find('.custom-icon-button').length != 0) {
+      return;
+    }
+    else {
+      addZeButton($imgLink);
+      $imgLink.find('.custom-icon-button').css({
+        'bottom': ($(this).height() - logoWidth + verticalDistanceFromWindow) + 'px'
+      });
+    }
+  });
+
+
+});

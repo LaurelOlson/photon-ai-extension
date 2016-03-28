@@ -3,12 +3,7 @@
 $(function(){
     
     function addZeButton($imgDiv) {
-        $imgDiv.prepend($('<button>', {class: 'photon-button'}).text('photon').css({
-            'position': 'absolute',
-            'top': '3px',
-            'right': '3px',
-            'z-index': '52'
-            });
+        $imgDiv.prepend($('<div>', {class: 'photon-button custom-icon-button'})
         ); 
     }
 
@@ -54,11 +49,7 @@ $(function(){
             src: completePath,
             id: 'photonParseSizeTarget'
         });
-        $img.css({
-            'visibility': 'hidden',
-            'position': 'fixed',
-            'z-index': '-100'
-        });
+        $img.addClass('make-invis');
         $('body').append($img);
         $img.on('load', function(){
             var $zeImg = $(this);
@@ -121,7 +112,7 @@ $(function(){
     var outerDiv = $('<div>').addClass('outer');
 
     var hoverDiv = $('<div>').addClass('hover-div');
-    var addPhotoButton = $('<input>', {class: 'photon-button'}).attr({type: 'button', value: 'add photo'});
+    var addPhotoButton = $('<div>', {class: 'photon-button custom-icon-button'}).attr({type: 'button', value: 'add photo'});
 
     addPhotoButton.appendTo(hoverDiv);
 
