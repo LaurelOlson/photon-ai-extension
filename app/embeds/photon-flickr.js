@@ -1,5 +1,12 @@
 'use strict';
 
+// chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) { 
+//     console.log('got msg');
+//     // var user_id = req.user_id;  
+//     // return user_id;
+// });
+
+
 $(function(){
     
     function addZeButton($imgDiv) {
@@ -29,14 +36,8 @@ $(function(){
     // Determines if last underscore in url before .jpg is part of path or just an image size modifier
     function underscoreIsPath(imagePath) {
        var underScoreFragment = imagePath.substring(imagePath.lastIndexOf("_") + 1, imagePath.lastIndexOf("."));
-
         // Flickr uses convention _ +  a letter to resize images via url
         return underScoreFragment.length > 1;
-        // if (underScoreFragment.length > 1) {
-        //     return true;
-        // } else {
-        //     return false;
-        // }
     }
 
     function getNativeDimensions(imagePath, callback) {
@@ -85,22 +86,24 @@ $(function(){
 
             function parseImg(imgObj){
                 // console.log(imgObj);
+                // $.ajax({
+                //   method: 'POST',
+                //   data: { user_id: user_id, url: imgObj.url, width: imgObj.width, height: imgObj.height },
+                //   url: 'https://localhost:3000/addedphotos',
+                //   dataType: 'json'
+                // }).done(function(res) {
+                //     console.log(res);
+                //   // why no work?
+                //   // return sendResponse({ res: res });
+                //   // sendResponse({ res: res });
+                // });
                 chrome.runtime.sendMessage({ url: imgObj.url, width: imgObj.width, height: imgObj.height }, function(response) {
                     console.log(response);
                 });
-                // console.log(imgObj);
             }
 
             getNativeDimensions(imagePath, parseImg);
 
-            // $.ajax ({
-            //     url: 'https://localhost:3000/user/1/addedphotos',
-            //     method: 'POST',
-            //     data: {url: imagePath}
-            //     })
-            //     .done(function(msg) {
-            //         console.log('We did it!');
-            //     });
         });
     });
 
