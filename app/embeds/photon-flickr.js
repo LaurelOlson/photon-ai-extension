@@ -4,8 +4,7 @@
 $(function(){
        
     function addZeButton($imgDiv) {
-        $imgDiv.prepend($('<div>', {class: 'custom-icon-button'})
-        ); 
+        $imgDiv.prepend($('<div>', {class: 'custom-icon-button'})); 
     }
 
     function cleanUpStyle(styleAttrib) {
