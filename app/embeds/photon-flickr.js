@@ -1,10 +1,13 @@
 'use strict';
 
-
 $(function(){
        
     function addZeButton($imgDiv) {
-        $imgDiv.prepend($('<div>', {class: 'custom-icon-button'})); 
+        $imgDiv.prepend($('<div>', { class: 'flip' }));
+        var $cardContainer = $imgDiv.children('.flip');
+        $cardContainer.append($('<div>', { class: 'card' }));
+        $cardContainer.children('.card').append($('<div>', { class: 'face front' }));
+        $cardContainer.children('.card').append($('<div>', { class: 'face back' }));
     }
 
     function cleanUpStyle(styleAttrib) {
@@ -56,20 +59,37 @@ $(function(){
         });
     }
 
+    function parseImg(imgObj) {
+        console.log('sending msg');
+        chrome.runtime.sendMessage({ url: imgObj.url, width: imgObj.width, height: imgObj.height });
+    }
+
     // Body selector case for images wrapped in 'a' tags
     $('body').on('mouseenter', '.overlay', function() {
         var $imgDiv = $(this).closest('.photo-list-photo-interaction');
-        if ($imgDiv.find('.custom-icon-button').length != 0) {
+        if ($imgDiv.find('.flip').length !== 0) {
             return;
         } else {
             addZeButton($imgDiv);
         }
+        $(".flip").hover(function(){
+          if ($(this).data('clicked')) {
+            return;
+          } else {
+              $imgDiv.find(".card").toggleClass("flipped");
+              return false;  
+          }
+        });
 
-        $imgDiv.find('.custom-icon-button').one('click', function() {
-            var zeButton = $(this);
+        $imgDiv.find('.flip').one('click', function() {
+            var flipDiv = $(this);
+            var zeButtonFront = flipDiv.find('.face .front');
+            var zeButtonBack = flipDiv.find('.back');
             var zeElem = $imgDiv.closest('.photo-list-photo-view');
             var styleAttrib = zeElem.attr('style');
             var imagePath = (createPhotoUrl(styleAttrib).replace(/"/g, ""));
+
+            flipDiv.attr('data-clicked', 'true');
 
             //If image path has more than one _, then this link.replace(/_.$/g, ""))
             if (underscoreIsPath(imagePath)) {
@@ -78,16 +98,11 @@ $(function(){
                 imagePath = imagePath.replace(/(_[a-z])(\.jpg+)$/g, "");
             }
 
-            function parseImg(imgObj){
-                chrome.runtime.sendMessage({ url: imgObj.url, width: imgObj.width, height: imgObj.height });
-            }
-
             chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) {
-                console.log(req);
+                console.log('inserted into db');
                 if (req) {
-                    console.log(zeButton);
-                    (zeButton).css({'display': 'none'});
-                    // change button to indicate success
+                    zeButtonFront.css({'background-image': 'url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/check-32.png")'});
+                    zeButtonBack.css({'background-image': 'url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/check-32.png")'});
                 }
             });
 
@@ -108,7 +123,7 @@ $(function(){
     var outerDiv = $('<div>').addClass('outer');
 
     var hoverDiv = $('<div>').addClass('hover-div');
-    var addPhotoButton = $('<div>', {class: 'custom-icon-button'}).attr({type: 'button', value: 'add photo'});
+    var addPhotoButton = $('<div>', {class: 'card'}).attr({type: 'button', value: 'add photo'});
 
     addPhotoButton.appendTo(hoverDiv);
 
@@ -117,7 +132,7 @@ $(function(){
     mainImages.wrap(outerDiv);
     $('.outer').append(hoverDiv);
          
-    $('.hover-div').one('click', '.custom-icon-button', function(evt) {
+    $('.hover-div').one('click', '.card', function(evt) {
         evt.preventDefault();
         var imageLink = $(this).closest('.outer').children('img').attr('src');
         imageLink = imageLink.replace(/"/g, "");

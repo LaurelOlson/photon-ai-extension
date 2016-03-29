@@ -2,7 +2,7 @@
 
 $('#login').submit(function (e) {
   e.preventDefault();
-  // authentication token/id
+  console.log('hello world');
   var email = $('#email').val();
   var password = $('#password').val();
   $.ajax ({
