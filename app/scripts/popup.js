@@ -14,9 +14,10 @@ $('#clickme').click(function (e) {
   // Launch OAuth using Chrome Identity API
   chrome.identity.launchWebAuthFlow({url: authUrl, interactive: true}, function(responseUrl) {
     var accessToken = responseUrl.substring(responseUrl.indexOf("=") + 1);
+    console.log(accessToken);
     $.ajax ({
       method: 'POST',
-      data: { fbook_token: accessToken },
+      data: { token: accessToken },
       url: 'https://localhost:3000/login/ext',
       dataType: 'json'
     }).done(function(id) {
