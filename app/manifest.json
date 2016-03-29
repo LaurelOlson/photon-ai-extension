@@ -11,7 +11,7 @@
   "background": {
     "scripts": [
       "bower_components/jquery/dist/jquery.js",
-      "scripts/chromereload.js",
+      // "scripts/chromereload.js",
       "scripts/popup.js"
     ]
   },
@@ -19,8 +19,8 @@
     "tabs",
     "storage",
     "identity",
-    "https://www.facebook.com/",
-    "https://graph.facebook.com/",
+    "https://www.facebook.com/*",
+    "https://graph.facebook.com/*",
     "http://*/*",
     "https://*/*",
     "https://localhost/*"
