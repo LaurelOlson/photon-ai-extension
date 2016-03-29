@@ -1,20 +1,8 @@
 'use strict';
 
-// chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) { 
-//     console.log('got msg');
-//     // var user_id = req.user_id;  
-//     // return user_id;
-// });
-
 
 $(function(){
-
-    // chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) { 
-    //     console.log('got msg');
-    //     // var user_id = req.user_id;  
-    //     // return user_id;
-    // });
-    
+       
     function addZeButton($imgDiv) {
         $imgDiv.prepend($('<div>', {class: 'custom-icon-button'})
         ); 
@@ -79,6 +67,7 @@ $(function(){
         }
 
         $imgDiv.find('.custom-icon-button').one('click', function() {
+            var zeButton = $(this);
             var zeElem = $imgDiv.closest('.photo-list-photo-view');
             var styleAttrib = zeElem.attr('style');
             var imagePath = (createPhotoUrl(styleAttrib).replace(/"/g, ""));
@@ -91,22 +80,17 @@ $(function(){
             }
 
             function parseImg(imgObj){
-                // console.log(imgObj);
-                // $.ajax({
-                //   method: 'POST',
-                //   data: { user_id: user_id, url: imgObj.url, width: imgObj.width, height: imgObj.height },
-                //   url: 'https://localhost:3000/addedphotos',
-                //   dataType: 'json'
-                // }).done(function(res) {
-                //     console.log(res);
-                //   // why no work?
-                //   // return sendResponse({ res: res });
-                //   // sendResponse({ res: res });
-                // });
-                chrome.runtime.sendMessage({ url: imgObj.url, width: imgObj.width, height: imgObj.height }, function(response) {
-                    console.log(response);
-                });
+                chrome.runtime.sendMessage({ url: imgObj.url, width: imgObj.width, height: imgObj.height });
             }
+
+            chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) {
+                console.log(req);
+                if (req) {
+                    console.log(zeButton);
+                    (zeButton).css({'display': 'none'});
+                    // change button to indicate success
+                }
+            });
 
             getNativeDimensions(imagePath, parseImg);
 

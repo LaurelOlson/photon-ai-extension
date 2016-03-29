@@ -12,28 +12,20 @@ $('#login').submit(function (e) {
     dataType: 'json'
   }).done(function(id) {
     chrome.storage.sync.set({ 'user_id': id });
-    // chrome.storage.get(function(value) {
-    //   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-    //     chrome.tabs.sendMessage(tabs[0].id, { 'user_id': value['user_id'] }, function(response) {
-    //       console.log(response);
-    //     });
-    //   });
-    // });
   });
 });
 
 chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) { 
-  chrome.storage.sync.get('user_id', function(value) {
+  chrome.storage.sync.get(function(value) {
     $.ajax({
       method: 'POST',
-      data: { user_id: 'user_id', url: req.url, width: req.width, height: req.height },
+      data: { user_id: value['user_id'], url: req.url, width: req.width, height: req.height },
       url: 'https://localhost:3000/addedphotos',
       dataType: 'json'
     }).done(function(res) {
-      // why no work?
-      console.log(res);
-      return sendResponse({ res: res });
-      // sendResponse({ res: res });
+      chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, { 'res': res });
+      });
     });
   }); 
 });
