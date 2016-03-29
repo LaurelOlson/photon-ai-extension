@@ -53,14 +53,12 @@ $(function(){
             var $zeImg = $(this);
             output.width = $zeImg.width();
             output.height = $zeImg.height();
-            // console.log(output);
             $(this).remove();
             callback(output);
         });
     }
 
     function parseImg(imgObj) {
-        console.log('sending msg');
         chrome.runtime.sendMessage({ url: imgObj.url, width: imgObj.width, height: imgObj.height });
     }
 
@@ -99,7 +97,6 @@ $(function(){
             }
 
             chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) {
-                console.log('inserted into db');
                 if (req) {
                     zeButtonFront.css({'background-image': 'url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/check-32.png")'});
                     zeButtonBack.css({'background-image': 'url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/check-32.png")'});
@@ -142,7 +139,6 @@ $(function(){
         } else {
             imageLink = imageLink.replace(/(_[a-z])(\.jpg+)$/g, "");
         }
-        console.log(imageLink + '_b.jpg');
     });
 
 });
