@@ -30,21 +30,21 @@
 //   }); 
 // });
 
-$('#clickme').on('click', function() {
+$('#login').submit(function (e) {
+  e.preventDefault();
 
-  var redirectUrl = 'https://' + chrome.runtime.id +
-                  '.chromiumapp.org/provider_cb';
+  var redirectUrl = chrome.identity.getRedirectURL()
   console.log(redirectUrl);
-  // var clientId = "211877392505171";
-  // var authUrl = "https://www.facebook.com/dialog/oauth?" +
-  //   "client_id=" + clientId + "&" +
-  //   "redirect_uri=" + encodeURIComponent(redirectUrl);
+  var clientId = "211877392505171";
+  var authUrl = "https://www.facebook.com/dialog/oauth?" +
+    "client_id=" + clientId + "&" +
+    "redirect_uri=" + encodeURIComponent(redirectUrl);
 
-  // chrome.identity.launchWebAuthFlow({url: authUrl, interactive: true}, function(responseUrl) {
+  chrome.identity.launchWebAuthFlow({url: authUrl, interactive: true}, function(responseUrl) {
 
-  //   console.log(responseUrl);
-  //   var accessToken = responseUrl.substring(responseUrl.indexOf("=") + 1);
-  //   console.log(accessToken);
-  // });
+    console.log(responseUrl);
+    var accessToken = responseUrl.substring(responseUrl.indexOf("=") + 1);
+    console.log(accessToken);
+  });
 
 });
