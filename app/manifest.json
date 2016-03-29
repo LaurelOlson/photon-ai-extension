@@ -80,12 +80,7 @@
       "19": "images/logo-19.png",
       "38": "images/logo-38.png"
     },
-
-    // "background": {
-    //   "scripts": "popup.js",
-    //   "persistent" : false
-    // },
-
+    
     "default_title": "photon_ai_ext",
     "default_popup": "popup.html"
     }
