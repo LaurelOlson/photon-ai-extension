@@ -1,6 +1,5 @@
 'use strict';
 
-
 $(function(){
        
     function addZeButton($imgDiv) {
@@ -51,7 +50,6 @@ $(function(){
             var $zeImg = $(this);
             output.width = $zeImg.width();
             output.height = $zeImg.height();
-            // console.log(output);
             $(this).remove();
             callback(output);
         });
