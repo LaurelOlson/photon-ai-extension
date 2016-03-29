@@ -1,11 +1,27 @@
 'use strict';
 
+$('#login').submit(function (e) {
+  e.preventDefault();
+  console.log('hello world');
+  var email = $('#email').val();
+  var password = $('#password').val();
+  $.ajax ({
+    method: 'POST',
+    data: { email: email, password: password },
+    url: 'https://localhost:3000/login/ext',
+    dataType: 'json'
+  }).done(function(id) {
+    chrome.storage.sync.set({ 'user_id': id });
+  });
+});
+
 $('#clickme').click(function (e) {
   
   e.preventDefault();
 
   // Construct facebook OAuth url
   var redirectUrl = chrome.identity.getRedirectURL();
+  // var redirectUrl = 'https://hijnoccjmdgleaafippfiocophahkhkl.chromiumapp.org/'
   var clientId = "211877392505171";
   var authUrl = "https://www.facebook.com/dialog/oauth?" +
     "client_id=" + clientId + "&" +
@@ -18,7 +34,7 @@ $('#clickme').click(function (e) {
     $.ajax ({
       method: 'POST',
       data: { token: accessToken },
-      url: 'https://localhost:3000/login/ext',
+      url: 'https://localhost:3000/login/ext/facebook',
       dataType: 'json'
     }).done(function(id) {
       chrome.storage.sync.set({ 'user_id': id });
