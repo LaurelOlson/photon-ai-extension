@@ -51,6 +51,7 @@ $(function() {
   }
 
   function createPhotoUrl(styleAttrib) {
+    console.log(styleAttrib);
       var cleanStyle = cleanUpStyle(styleAttrib);
       var photoUrl = cleanStyle['background-image'];
       var linkLinter = /\(([^\)]+)\)/;
@@ -70,6 +71,8 @@ $(function() {
     $cardContainer.children('.card').append($('<div>', { class: 'face back' }));
   }
 
+
+  // Home page stuff
   $('body').on('mouseenter', '.link', function() {
 
     var $imgLink = $(this).closest('.lazy-hidden');
@@ -124,20 +127,60 @@ $(function() {
 
   $('body').on('mouseleave', '.photo.lazy-hidden', function() {
     $(this).children('.flip').children('div').hide();
-  })
+  });
 
-  // $('body').on('mouseenter', '.photo_link', function () {
-  //   var $imgLink = $(this).siblings ('.info');
-  //   if ($imgLink.find('.custom-icon-button').length != 0) {
-  //     return;
-  //   }
-  //   else {
-  //     addZeButton($imgLink);
-  //     $imgLink.find('.custom-icon-button').css({
-  //       'bottom': ($(this).height() - logoWidth + verticalDistanceFromWindow) + 'px'
-  //     });
-  //   }
-  // });
+  //Discover page stuff
+
+  $('body').on('mouseenter', '.photo_link', function () {
+    var $imgLink = $(this).siblings('.photo_thumbnail__pulse_container');
+    if ($imgLink.find('.flip').length === 0) {
+      addZeButton($imgLink);
+      $imgLink.find('.custom-icon-button').css({
+        'top': '-10px',
+        'right': ($(this).width() - logoWidth - horizontalDistanceFromWindow) + 'px'
+      });
+    } else {
+      $imgLink.children('.flip').children('div').show();
+    }
+
+    $(".flip").hover(function(){
+      if ($(this).data('clicked')) {
+        return;
+      } else {
+          $(this).find(".card").addClass("flipped");
+          return false;  
+      }
+    }, function() {
+      if ($(this).data('clicked')) {
+        return;
+      } else {
+          $(this).find(".card").removeClass("flipped");
+          return false;  
+      }
+    });
+
+    $imgLink.find('.flip').one('click', function() {
+        var flipDiv = $(this);
+        var zeButtonFront = flipDiv.find('.face .front');
+        var zeButtonBack = flipDiv.find('.back');
+        var zeElem = $imgLink.siblings('.photo_link').children('img');
+        var imagePath = (zeElem.attr('src')).replace(/"/g, "");
+
+        flipDiv.attr('data-clicked', 'true');
+
+        chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) {
+            if (req) {
+                zeButtonFront.css({'background-image': 'url("chrome-extension://hijnoccjmdgleaafippfiocophahkhkl/images/check-32.png")'});
+                zeButtonBack.css({'background-image': 'url("chrome-extension://hijnoccjmdgleaafippfiocophahkhkl/images/check-32.png")'});
+            }
+        });
+
+        getNativeDimensions(imagePath, parseImg);
+
+    });
+  });
+
+  // Still need to handle grabbing imgs from individual profile gallery
 
     // $('body').on('mouseenter', '.photo_link', function() {
   //   var $imgLink = $(this).siblings('.photo_thumbnail__pulse_container');
