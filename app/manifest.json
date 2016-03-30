@@ -10,14 +10,16 @@
   "default_locale": "en",
   "background": {
     "scripts": [
-      "scripts/chromereload.js",
-      "scripts/background.js"
+      "bower_components/jquery/dist/jquery.js",
+      "scripts/popup.js"
     ]
   },
   "permissions": [
+    "tabs",
+    "storage",
     "identity",
-    "https://www.facebook.com/",
-    "https://graph.facebook.com/",
+    "https://www.facebook.com/*",
+    "https://graph.facebook.com/*",
     "http://*/*",
     "https://*/*",
     "https://localhost/*"
@@ -47,6 +49,7 @@
         "https://*.staticflickr.com/*"
       ],
       "js": [
+        "bower_components/jquery/dist/jquery.js",
         "./embeds/photon-flickr.js"
       ],
       "css": [
@@ -76,12 +79,7 @@
       "19": "images/logo-19.png",
       "38": "images/logo-38.png"
     },
-
-    "background": {
-      "scripts": "popup.js",
-      "persistent" : false
-    },
-
+    
     "default_title": "photon_ai_ext",
     "default_popup": "popup.html"
     }

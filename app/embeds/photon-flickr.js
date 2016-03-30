@@ -1,7 +1,7 @@
 'use strict';
 
 $(function(){
-    
+       
     function addZeButton($imgDiv) {
         $imgDiv.prepend($('<div>', {class: 'custom-icon-button'})
         ); 
@@ -29,14 +29,8 @@ $(function(){
     // Determines if last underscore in url before .jpg is part of path or just an image size modifier
     function underscoreIsPath(imagePath) {
        var underScoreFragment = imagePath.substring(imagePath.lastIndexOf("_") + 1, imagePath.lastIndexOf("."));
-
         // Flickr uses convention _ +  a letter to resize images via url
         return underScoreFragment.length > 1;
-        // if (underScoreFragment.length > 1) {
-        //     return true;
-        // } else {
-        //     return false;
-        // }
     }
 
     function getNativeDimensions(imagePath, callback) {
@@ -56,7 +50,6 @@ $(function(){
             var $zeImg = $(this);
             output.width = $zeImg.width();
             output.height = $zeImg.height();
-            // console.log(output);
             $(this).remove();
             callback(output);
         });
@@ -72,6 +65,7 @@ $(function(){
         }
 
         $imgDiv.find('.custom-icon-button').one('click', function() {
+            var zeButton = $(this);
             var zeElem = $imgDiv.closest('.photo-list-photo-view');
             var styleAttrib = zeElem.attr('style');
             var imagePath = (createPhotoUrl(styleAttrib).replace(/"/g, ""));
@@ -84,23 +78,20 @@ $(function(){
             }
 
             function parseImg(imgObj){
-                // console.log(imgObj);
-                chrome.runtime.sendMessage({ url: imgObj.url, width: imgObj.width, height: imgObj.height }, function(response) {
-                    console.log(response);
-                });
-                // console.log(imgObj);
+                chrome.runtime.sendMessage({ url: imgObj.url, width: imgObj.width, height: imgObj.height });
             }
+
+            chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) {
+                console.log(req);
+                if (req) {
+                    console.log(zeButton);
+                    (zeButton).css({'display': 'none'});
+                    // change button to indicate success
+                }
+            });
 
             getNativeDimensions(imagePath, parseImg);
 
-            // $.ajax ({
-            //     url: 'https://localhost:3000/user/1/addedphotos',
-            //     method: 'POST',
-            //     data: {url: imagePath}
-            //     })
-            //     .done(function(msg) {
-            //         console.log('We did it!');
-            //     });
         });
     });
 

@@ -36,3 +36,11 @@ li {
   background: #2E5481;
   border: solid 1px #203E5F;
 }
+
+.loggedInContainer {
+  background: red;
+}
+
+.loggedInContainer h1 {
+  margin: 30px;
+}
