@@ -33,6 +33,9 @@
         "http://*/*",
         "https://*/*"
       ],
+      "exclude_matches": [
+        "https://localhost:3000/"
+      ],
       "js": [
         "bower_components/jquery/dist/jquery.js",
         "./embeds/photon.js"
