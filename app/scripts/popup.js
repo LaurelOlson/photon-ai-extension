@@ -84,6 +84,11 @@ $(function() {
     }); 
   });
 
+  $('#checkusout').click(function (e) {
+    e.preventDefault;
+    chrome.tabs.create({url: 'https://localhost:3000'});
+  });
+
 });
 
   // Laurel's stuff
