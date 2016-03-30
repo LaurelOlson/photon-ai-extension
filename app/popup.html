@@ -11,7 +11,7 @@
     <!-- endbuild -->
   </head>
   <body>
-    <section class="loginform cf">
+    <section id="loginform">
     <form name="login" id="login" action="index_submit" method="post" accept-charset="utf-8">
         <h3>Don't hit the keys so hard. It hurts.</h3>
         <hr></hr>
@@ -21,6 +21,17 @@
             <input type="password" id="password" name="password" placeholder="Password" required>
             <input id="clickme" type="submit" class="button-link" value="Login">
     </form>
+    </section>
+
+    <section id="loggedInContainer">
+        <h1>
+            7
+        </h1>
+        <p>
+            images saved
+        </p>
+
+        <input id="logmeout" type="submit" class="button-link" value="Logout">
     </section>
 
     <!-- build:js scripts/popup-vendor.js -->

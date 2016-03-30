@@ -55,3 +55,21 @@ hr {
     border: solid 1px #203E5F;
 }
 
+.saved-photos {
+  display: none;
+}
+
+#loggedInContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 400px;
+  width: 200px;
+}
+#loggedInContainer h1 {
+    font-size: 6em;
+  }
+#loggedInContainer p {
+    font-size: 2em;
+  }
