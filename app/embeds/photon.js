@@ -40,61 +40,73 @@ $(function() {
     const MIN_HEIGHT = 100;
 
     $('body').on('mouseenter', 'img', function() {
-        var $zeImg = $(this);
-        var outerDiv = $('<div>').addClass('outer');
-        if (($zeImg[0].width > MIN_WIDTH && $zeImg[0].height > MIN_HEIGHT) && ($zeImg.closest('.outer').length === 0)) {
-            $(this).wrap(outerDiv);
-        }
-        var $imgDiv = $(this).closest('.outer');
-        if ($imgDiv.children('.flip-img').length === 0) {
-            $imgDiv.prepend($('<div>', { class: 'flip-img' }));
-            var $cardContainer = $imgDiv.children('.flip-img');
-            $cardContainer.append($('<div>', { class: 'card-img' }));
-            $cardContainer.children('.card-img').append($('<div>', { class: 'face front' }));
-            $cardContainer.children('.card-img').append($('<div>', { class: 'face back' }));
+      var $zeImg = $(this);
+      var outerDiv = $('<div>').addClass('outer');
+      if (($zeImg[0].width > MIN_WIDTH && $zeImg[0].height > MIN_HEIGHT) && ($zeImg.closest('.outer').length === 0)) {
+          $(this).wrap(outerDiv);
+      }
+      var $imgDiv = $(this).closest('.outer');
+      if ($imgDiv.children('.flip-img').length === 0) {
+          $imgDiv.prepend($('<div>', { class: 'flip-img' }));
+          var $cardContainer = $imgDiv.children('.flip-img');
+          $cardContainer.append($('<div>', { class: 'card-img' }));
+          $cardContainer.children('.card-img').append($('<div>', { class: 'face front' }));
+          $cardContainer.children('.card-img').append($('<div>', { class: 'face back' }));
+      } else {
+          $imgDiv.children('div').show();
+      }
+
+      $(".flip-img").hover(function(){
+        if ($(this).data('clicked')) {
+          return;
         } else {
-            $imgDiv.children('div').show();
+            $(this).children('.card-img').addClass("flipped");
+            handleClick($imgDiv);
+            return false;  
         }
-        $(".flip-img").hover(function(){
-          if ($(this).data('clicked')) {
-            return;
-          } else {
-              $(this).children(".card-img").toggleClass("flipped");
-              $imgDiv.find('.face').one('click', function(e) {
-                  
-                  e.preventDefault();
-                  var flipDiv = $(this).closest('.flip-img');
-                  var zeButtonFront = $(this).closest('.front');
-                  var zeButtonBack = $(this).closest('.back');
-                  var imagePath = $zeImg.attr('src');
-
-                  flipDiv.attr('data-clicked', 'true');
-
-                  //If image path has more than one _, then this link.replace(/_.$/g, ""))
-                  if (underscoreIsPath(imagePath)) {
-                      imagePath = imagePath.replace(/\.jpg/g, "");
-                  } else {
-                      imagePath = imagePath.replace(/(_[a-z])(\.jpg+)$/g, "");
-                  }
-
-                  chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) {
-                      if (req) {
-                          zeButtonFront.css({'background-image': 'url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/check-32.png")'});
-                          zeButtonBack.css({'background-image': 'url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/check-32.png")'});
-                      }
-                  });
-
-                  getNativeDimensions(imagePath, parseImg);
-
-              }); 
-              return false;
-          }
-        });
-
+      }, function() {
+        if ($(this).data('clicked')) {
+          return;
+        } else {
+            $(this).children('.card-img').removeClass("flipped");
+            handleClick($imgDiv);
+            return false;  
+        } 
+      });
     });
 
     $('body').on('mouseleave', '.outer', function() {
         $(this).children('div').hide();
     });
+
+  function handleClick($imgDiv) {
+
+    $imgDiv.find('.face').one('click', function(e) {
+      
+      e.preventDefault();
+      var flipDiv = $(this).closest('.flip-img');
+      var zeButtonFront = $(this).closest('.front');
+      var zeButtonBack = $(this).closest('.back');
+      var imagePath = $zeImg.attr('src');
+
+      flipDiv.attr('data-clicked', 'true');
+
+      //If image path has more than one _, then this link.replace(/_.$/g, ""))
+      if (underscoreIsPath(imagePath)) {
+          imagePath = imagePath.replace(/\.jpg/g, "");
+      } else {
+          imagePath = imagePath.replace(/(_[a-z])(\.jpg+)$/g, "");
+      }
+
+      chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) {
+          if (req) {
+              zeButtonFront.css({'background-image': 'url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/check-32.png")'});
+              zeButtonBack.css({'background-image': 'url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/check-32.png")'});
+          }
+      });
+
+      getNativeDimensions(imagePath, parseImg);
+
+  };
 
 });

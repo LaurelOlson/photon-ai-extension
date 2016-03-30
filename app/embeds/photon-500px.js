@@ -47,6 +47,22 @@ $(function() {
       $imgLink.children('.flip').children('div').show();
     }
 
+    $(".flip").hover(function(){
+      if ($(this).data('clicked')) {
+        return;
+      } else {
+          $(this).find(".card").addClass("flipped");
+          return false;  
+      }
+    }, function() {
+      if ($(this).data('clicked')) {
+        return;
+      } else {
+          $(this).find(".card").removeClass("flipped");
+          return false;  
+      }
+    });
+
   });
 
   $('body').on('mouseleave', '.photo.lazy-hidden', function() {

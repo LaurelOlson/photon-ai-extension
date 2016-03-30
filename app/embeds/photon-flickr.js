@@ -72,13 +72,22 @@ $(function(){
         } else {
             addZeButton($imgDiv);
         }
+
         $(".flip").hover(function(){
           if ($(this).data('clicked')) {
             return;
           } else {
-              $imgDiv.find(".card").toggleClass("flipped");
+              $(this).find(".card").addClass("flipped");
               return false;  
           }
+        }, function() {
+          if ($(this).data('clicked')) {
+            return;
+          } else {
+              $(this).find(".card").removeClass("flipped");
+              return false;  
+          }
+
         });
 
         $imgDiv.find('.flip').one('click', function() {
