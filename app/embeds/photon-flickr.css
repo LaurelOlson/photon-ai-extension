@@ -1,26 +1,3 @@
-.outer {
-  position: relative;
-}
-
-.hover-div {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  transition: opacity .25s ease-in-out;
-  z-index: 52;
-}
-
-.photon-button {
-  float: right;
-}
-
-.hover-div:hover {
-  opacity: 1;
-}
-
 .make-invis {
   visibility: hidden;
   position: fixed;
@@ -81,13 +58,13 @@
 .flip .card .front {
   position: absolute;
   z-index: 1;
-  background-image: url("chrome-extension://hijnoccjmdgleaafippfiocophahkhkl/images/logo-32.png");
+  background-image: url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/logo-32.png");
   background-repeat: no-repeat;
   color: white;
   cursor: pointer;
 }
 .flip .card .back {
-  background-image: url("chrome-extension://hijnoccjmdgleaafippfiocophahkhkl/images/plus-32.png");
+  background-image: url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/plus-32.png");
   background-repeat: no-repeat;
   color: black;
   cursor: pointer;
