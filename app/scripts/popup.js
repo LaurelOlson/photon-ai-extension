@@ -38,7 +38,7 @@ $(function() {
       $.ajax ({
         method: 'POST',
         data: { token: accessToken },
-        url: 'https://localhost:3000/login/ext',
+        url: 'https://localhost:3000/login/ext/facebook',
         dataType: 'json'
       }).done(function(id) {
         chrome.storage.sync.set({ 'user_id': id });
