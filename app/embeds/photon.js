@@ -2,10 +2,18 @@
 
 $(function() {
 
-    // Determines if last underscore in url before .jpg is part of path or just an image size modifier
+    function checkICanHazHttps(imagePath) {
+      if (imagePath.match(/https/g) || imagePath.match(/http/g)) {
+        return imagePath;
+      }
+      else {
+        imagePath = 'https' + imagePath;
+        return imagePath;
+      }
+    }
 
     function getNativeDimensions(imagePath, callback) {
-        var completePath = 'https:' + imagePath;
+        var completePath = checkICanHazHttps(imagePath);
         var output = {
             url: completePath,
             width: 0,
