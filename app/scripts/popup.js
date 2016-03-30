@@ -32,8 +32,6 @@ $(function() {
       "client_id=" + clientId + "&" +
       "redirect_uri=" + encodeURIComponent(redirectUrl) + "&" + "scope=" + "public_profile";
 
-    console.log(authUrl);
-
     // Launch OAuth using Chrome Identity API
     chrome.identity.launchWebAuthFlow({url: authUrl, interactive: true}, function(responseUrl) {
       console.log(responseUrl);
@@ -58,6 +56,38 @@ $(function() {
           }
         });
       });
+    });
+  });
+
+  // Log out
+  $('#logmeout').click(function (e) {
+    
+    e.preventDefault();
+    chrome.storage.sync.clear();
+    chrome.runtime.reload();
+    $('#loginform').show();
+    $('#loggedInContainer').hide();
+  });
+
+  // Sends photo url & image specs to current user's db table
+  chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) { 
+    chrome.storage.sync.get(function(value) {
+      $.ajax({
+        method: 'POST',
+        data: { user_id: value['user_id'], url: req.url, width: req.width, height: req.height },
+        url: 'https://localhost:3000/addedphotos',
+        dataType: 'json'
+      }).done(function(res) {
+
+        // Lets content scripts know that photo was saved so that it can update add-photo-button state
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+          chrome.tabs.sendMessage(tabs[0].id, { 'res': res });
+        });
+      });
+    }); 
+  });
+
+});
 
   // Laurel's stuff
 
@@ -101,35 +131,5 @@ $(function() {
 
   //     });
   //   });
-
-  // Log out
-  $('#logmeout').click(function (e) {
-    
-    e.preventDefault();
-    chrome.storage.sync.clear();
-    chrome.runtime.reload();
-    $('#loginform').show();
-    $('#loggedInContainer').hide();
-  });
-
-  // Sends photo url & image specs to current user's db table
-  chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) { 
-    chrome.storage.sync.get(function(value) {
-      $.ajax({
-        method: 'POST',
-        data: { user_id: value['user_id'], url: req.url, width: req.width, height: req.height },
-        url: 'https://localhost:3000/addedphotos',
-        dataType: 'json'
-      }).done(function(res) {
-
-        // Lets content scripts know that photo was saved so that it can update add-photo-button state
-        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-          chrome.tabs.sendMessage(tabs[0].id, { 'res': res });
-        });
-      });
-    }); 
-  });
-
-});
 
 
