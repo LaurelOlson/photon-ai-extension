@@ -4,10 +4,6 @@ $(function() {
   const horizontalDistanceFromWindow = 11;
   const verticalDistanceFromWindow = 2;
 
-  // function addZeButton($imgLink) {
-  //   var newButton = $imgLink.prepend($('<div>', {class: 'custom-icon-button'})); 
-  // }
-
   function checkICanHazHttps(imagePath) {
     if (imagePath.match(/https/g) || imagePath.match(/http/g)) {
       return imagePath;
