@@ -1,12 +1,17 @@
 'use strict';
 
 $(function(){
-       
+    
+    // Add button animation
     function addZeButton($imgDiv) {
-        $imgDiv.prepend($('<div>', {class: 'custom-icon-button'})
-        ); 
+        $imgDiv.prepend($('<div>', { class: 'flip' }));
+        var $cardContainer = $imgDiv.children('.flip');
+        $cardContainer.append($('<div>', { class: 'card' }));
+        $cardContainer.children('.card').append($('<div>', { class: 'face front' }));
+        $cardContainer.children('.card').append($('<div>', { class: 'face back' }));
     }
 
+    // Parses the style tag in Flickr's embedded html
     function cleanUpStyle(styleAttrib) {
         var parts = styleAttrib.split("; ");
         var obj = {};
@@ -27,7 +32,7 @@ $(function(){
     }
 
     // Determines if last underscore in url before .jpg is part of path or just an image size modifier
-    function underscoreIsPath(imagePath) {
+    function underscoresInPath(imagePath) {
        var underScoreFragment = imagePath.substring(imagePath.lastIndexOf("_") + 1, imagePath.lastIndexOf("."));
         // Flickr uses convention _ +  a letter to resize images via url
         return underScoreFragment.length > 1;
@@ -55,78 +60,71 @@ $(function(){
         });
     }
 
+    function parseImg(imgObj) {
+        chrome.runtime.sendMessage({ url: imgObj.url, width: imgObj.width, height: imgObj.height });
+    }
+
     // Body selector case for images wrapped in 'a' tags
     $('body').on('mouseenter', '.overlay', function() {
         var $imgDiv = $(this).closest('.photo-list-photo-interaction');
-        if ($imgDiv.find('.custom-icon-button').length != 0) {
+        if ($imgDiv.find('.flip').length !== 0) {
             return;
         } else {
             addZeButton($imgDiv);
         }
 
-        $imgDiv.find('.custom-icon-button').one('click', function() {
-            var zeButton = $(this);
+        $(".flip").hover(function(){
+          if ($(this).data('clicked')) {
+            return;
+          } else {
+              $(this).find(".card").addClass("flipped");
+              return false;  
+          }
+        }, function() {
+          if ($(this).data('clicked')) {
+            return;
+          } else {
+              $(this).find(".card").removeClass("flipped");
+              return false;  
+          }
+
+        });
+
+        $imgDiv.find('.flip').one('click', function() {
+            var flipDiv = $(this);
+            var zeButtonFront = flipDiv.find('.face .front');
+            var zeButtonBack = flipDiv.find('.back');
             var zeElem = $imgDiv.closest('.photo-list-photo-view');
             var styleAttrib = zeElem.attr('style');
-            var imagePath = (createPhotoUrl(styleAttrib).replace(/"/g, ""));
+            if (styleAttrib) {
+                var imagePath = (createPhotoUrl(styleAttrib).replace(/"/g, ""));
+            }
+            else {
+                // This case covers special a tags under "Trending"
+                var zeElem = (flipDiv.closest('.photo-list-photo-interaction-view')).siblings('a').children('.photo');
+                var styleAttrib = zeElem.attr('style');
+                var imagePath = (createPhotoUrl(styleAttrib).replace(/'/g, ""));
+            }
 
-            //If image path has more than one _, then this link.replace(/_.$/g, ""))
-            if (underscoreIsPath(imagePath)) {
+            flipDiv.attr('data-clicked', 'true');
+
+            //If image path has more than one _, then take out the last _ and replace
+            if (underscoresInPath(imagePath)) {
                 imagePath = imagePath.replace(/\.jpg/g, "");
             } else {
                 imagePath = imagePath.replace(/(_[a-z])(\.jpg+)$/g, "");
             }
 
-            function parseImg(imgObj){
-                chrome.runtime.sendMessage({ url: imgObj.url, width: imgObj.width, height: imgObj.height });
-            }
-
             chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) {
-                console.log(req);
                 if (req) {
-                    console.log(zeButton);
-                    (zeButton).css({'display': 'none'});
-                    // change button to indicate success
+                    zeButtonFront.css({'background-image': 'url("chrome-extension://hijnoccjmdgleaafippfiocophahkhkl/images/check-32.png")'});
+                    zeButtonBack.css({'background-image': 'url("chrome-extension://hijnoccjmdgleaafippfiocophahkhkl/images/check-32.png")'});
                 }
             });
 
             getNativeDimensions(imagePath, parseImg);
 
         });
-    });
-
-    // This handles regular images on the website
-
-    // Restrict image size
-    const MAX_WIDTH = 100;
-    const MAX_HEIGHT = 100;
-
-    var images = $('img');
-
-    // Adding a container div to make it easier to locate in the DOM
-    var outerDiv = $('<div>').addClass('outer');
-
-    var hoverDiv = $('<div>').addClass('hover-div');
-    var addPhotoButton = $('<div>', {class: 'custom-icon-button'}).attr({type: 'button', value: 'add photo'});
-
-    addPhotoButton.appendTo(hoverDiv);
-
-    // Only applies to images that are a certain size aka not thumb-nails
-    var mainImages = images.filter(function(i, image) { return (image.clientWidth > MAX_WIDTH && image.clientHeight > MAX_HEIGHT); });
-    mainImages.wrap(outerDiv);
-    $('.outer').append(hoverDiv);
-         
-    $('.hover-div').one('click', '.custom-icon-button', function(evt) {
-        evt.preventDefault();
-        var imageLink = $(this).closest('.outer').children('img').attr('src');
-        imageLink = imageLink.replace(/"/g, "");
-
-        if (underscoreIsPath(imageLink)) {
-            imageLink = imageLink.replace(/\.jpg/g, "");
-        } else {
-            imageLink = imageLink.replace(/(_[a-z])(\.jpg+)$/g, "");
-        }
-        console.log(imageLink + '_b.jpg');
     });
 
 });

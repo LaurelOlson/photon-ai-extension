@@ -20,7 +20,7 @@ $(function() {
     }
   });
 
-  // Login
+  // Facebook Login
   $('#clickme').click(function (e) {
   
     e.preventDefault();
@@ -85,53 +85,36 @@ $(function() {
   });
 
   $('#checkusout').click(function (e) {
-    e.preventDefault;
+    e.preventDefault();
     chrome.tabs.create({url: 'https://localhost:3000'});
   });
 
 });
 
-  // Laurel's stuff
+  // Local Login
 
-  // $('#login').submit(function (e) {
-  //   e.preventDefault();
-  //   var email = $('#email').val();
-  //   var password = $('#password').val();
-  //   $.ajax ({
-  //     method: 'POST',
-  //     data: { email: email, password: password },
-  //     url: 'https://localhost:3000/login/ext',
-  //     dataType: 'json'
-  //   }).done(function(id) {
-  //     chrome.storage.sync.set({ 'user_id': id });
-  //   });
-  // });
+$('#login').submit(function (e) {
+  e.preventDefault();
+  console.log('hello world');
+  var email = $('#email').val();
+  var password = $('#password').val();
+  $.ajax ({
+    method: 'POST',
+    data: { email: email, password: password },
+    url: 'https://localhost:3000/login/ext',
+    dataType: 'json'
+  }).done(function(id) {
+    chrome.storage.sync.set({ 'user_id': id });
+    chrome.storage.sync.get('user_id', function(value) {
+      if (value['user_id']) {
+        $('#loginform').hide();
+        $('#loggedInContainer').show();
+      }
+      else {
+        return;
+      }
+    });
+  });
 
-  // $('#clickme').click(function (e) {
-    
-  //   e.preventDefault();
-
-  //   // Construct facebook OAuth url
-  //   var redirectUrl = chrome.identity.getRedirectURL();
-  //   // var redirectUrl = 'https://hijnoccjmdgleaafippfiocophahkhkl.chromiumapp.org/'
-  //   var clientId = "211877392505171";
-  //   var authUrl = "https://www.facebook.com/dialog/oauth?" +
-  //     "client_id=" + clientId + "&" +
-  //     "redirect_uri=" + encodeURIComponent(redirectUrl);
-
-  //   // Launch OAuth using Chrome Identity API
-  //   chrome.identity.launchWebAuthFlow({url: authUrl, interactive: true}, function(responseUrl) {
-  //     var accessToken = responseUrl.substring(responseUrl.indexOf("=") + 1);
-  //     console.log(accessToken);
-  //     $.ajax ({
-  //       method: 'POST',
-  //       data: { token: accessToken },
-  //       url: 'https://localhost:3000/login/ext/facebook',
-  //       dataType: 'json'
-  //     }).done(function(id) {
-  //       chrome.storage.sync.set({ 'user_id': id });
-
-  //     });
-  //   });
-
+});
 
