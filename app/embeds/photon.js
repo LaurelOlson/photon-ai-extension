@@ -2,15 +2,18 @@
 
 $(function() {
 
-    // Determines if last underscore in url before .jpg is part of path or just an image size modifier
-    function underscoreIsPath(imagePath) {
-       var underScoreFragment = imagePath.substring(imagePath.lastIndexOf("_") + 1, imagePath.lastIndexOf("."));
-        // Flickr uses convention _ +  a letter to resize images via url
-        return underScoreFragment.length > 1;
+    function checkICanHazHttps(imagePath) {
+      if (imagePath.match(/https/g) || imagePath.match(/http/g)) {
+        return imagePath;
+      }
+      else {
+        imagePath = 'https' + imagePath;
+        return imagePath;
+      }
     }
 
     function getNativeDimensions(imagePath, callback) {
-        var completePath = imagePath + '_b.jpg';
+        var completePath = checkICanHazHttps(imagePath);
         var output = {
             url: completePath,
             width: 0,
@@ -32,7 +35,6 @@ $(function() {
     }
 
     function parseImg(imgObj) {
-        console.log('sending message');
         chrome.runtime.sendMessage({ url: imgObj.url, width: imgObj.width, height: imgObj.height });
     }
 
@@ -61,7 +63,7 @@ $(function() {
           return;
         } else {
             $(this).children('.card-img').addClass("flipped");
-            handleClick($imgDiv);
+            handleClick($imgDiv, $zeImg);
             return false;  
         }
       }, function() {
@@ -69,7 +71,7 @@ $(function() {
           return;
         } else {
             $(this).children('.card-img').removeClass("flipped");
-            handleClick($imgDiv);
+            handleClick($imgDiv, $zeImg);
             return false;  
         } 
       });
@@ -79,10 +81,9 @@ $(function() {
         $(this).children('div').hide();
     });
 
-  function handleClick($imgDiv) {
+  function handleClick($imgDiv, $zeImg) {
 
     $imgDiv.find('.face').one('click', function(e) {
-      
       e.preventDefault();
       var flipDiv = $(this).closest('.flip-img');
       var zeButtonFront = $(this).closest('.front');
@@ -90,13 +91,6 @@ $(function() {
       var imagePath = $zeImg.attr('src');
 
       flipDiv.attr('data-clicked', 'true');
-
-      //If image path has more than one _, then this link.replace(/_.$/g, ""))
-      if (underscoreIsPath(imagePath)) {
-          imagePath = imagePath.replace(/\.jpg/g, "");
-      } else {
-          imagePath = imagePath.replace(/(_[a-z])(\.jpg+)$/g, "");
-      }
 
       chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) {
           if (req) {

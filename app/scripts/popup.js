@@ -68,6 +68,7 @@ $(function() {
 
   // Sends photo url & image specs to current user's db table
   chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) { 
+    console.log(req.url);
     chrome.storage.sync.get(function(value) {
       $.ajax({
         method: 'POST',
