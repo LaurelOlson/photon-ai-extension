@@ -28,15 +28,13 @@ $(function() {
     // Construct facebook OAuth url
     var redirectUrl = chrome.identity.getRedirectURL();
     var clientId = "211877392505171";
-    var authUrl = "https://www.facebook.com/dialog/oauth?" +
+    var authUrl = "https://www.facebook.com/v2.5/dialog/oauth?" +
       "client_id=" + clientId + "&" +
-      "redirect_uri=" + encodeURIComponent(redirectUrl) + "&" + "scope=" + "public_profile";
+      "redirect_uri=" + (redirectUrl);
 
     // Launch OAuth using Chrome Identity API
     chrome.identity.launchWebAuthFlow({url: authUrl, interactive: true}, function(responseUrl) {
-      console.log(responseUrl);
       var accessToken = responseUrl.substring(responseUrl.indexOf("=") + 1);
-      console.log(accessToken);
       $.ajax ({
         method: 'POST',
         data: { token: accessToken },
@@ -49,7 +47,6 @@ $(function() {
           if (value['user_id']) {
             $('#loginform').hide();
             $('#loggedInContainer').show();
-            chrome.runtime.reload();
           }
           else {
             return;
