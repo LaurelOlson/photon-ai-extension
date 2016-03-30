@@ -1,26 +1,105 @@
 $(function() {
 
-    // Restrict image size
-    const MAX_WIDTH = 100;
-    const MAX_HEIGHT = 100;
+    // Determines if last underscore in url before .jpg is part of path or just an image size modifier
+    function underscoreIsPath(imagePath) {
+       var underScoreFragment = imagePath.substring(imagePath.lastIndexOf("_") + 1, imagePath.lastIndexOf("."));
+        // Flickr uses convention _ +  a letter to resize images via url
+        return underScoreFragment.length > 1;
+    }
 
-    var images = $('img');
+    function getNativeDimensions(imagePath, callback) {
+        var completePath = imagePath + '_b.jpg';
+        var output = {
+            url: completePath,
+            width: 0,
+            height: 0
+        };
+        var $img = $('<img>').attr({
+            src: completePath,
+            id: 'photonParseSizeTarget'
+        });
+        $img.addClass('make-invis');
+        $('body').append($img);
+        $img.on('load', function(){
+            var $zeImg = $(this);
+            output.width = $zeImg.width();
+            output.height = $zeImg.height();
+            $(this).remove();
+            callback(output);
+        });
+    }
 
-    // Adding a container div to make it easier to locate in the DOM
-    var outerDiv = $('<div>').addClass('outer');
+    function parseImg(imgObj) {
+        console.log('sending message');
+        chrome.runtime.sendMessage({ url: imgObj.url, width: imgObj.width, height: imgObj.height });
+    }
 
-    var hoverDiv = $('<div>').addClass('hover-div');
-    var addPhotoButton = $('<div>', {class: 'custom-icon-button'}).attr({type: 'button', value: 'add photo'});
+    const MIN_WIDTH = 100;
+    const MIN_HEIGHT = 100;
 
-    addPhotoButton.appendTo(hoverDiv);
+    $('body').on('mouseenter', 'img', function() {
+        var $zeImg = $(this);
+        var outerDiv = $('<div>').addClass('outer');
+        if ($(this).closest('.outer').length === 0) {
+            console.log('no outer div');
+            $(this).wrap(outerDiv);
+        }
+        var $imgDiv = $(this).closest('.outer');
+        if ($imgDiv.children('.flip-img').length === 0) {
+            $imgDiv.prepend($('<div>', { class: 'flip-img' }));
+            var $cardContainer = $imgDiv.children('.flip-img');
+            $cardContainer.append($('<div>', { class: 'card-img' }));
+            $cardContainer.children('.card-img').append($('<div>', { class: 'face front' }));
+            $cardContainer.children('.card-img').append($('<div>', { class: 'face back' }));
+        } else {
+            $imgDiv.children('div').show();
+        }
+        $(".flip-img").hover(function(){
+          if ($(this).data('clicked')) {
+            return;
+          } else {
+              $(this).children(".card-img").toggleClass("flipped");
+              // return false; 
 
-    // Only applies to images that are a certain size aka not thumb-nails
-    var mainImages = images.filter(function(i, image) { return (image.clientWidth > MAX_WIDTH && image.clientHeight > MAX_HEIGHT) });
-    mainImages.wrap(outerDiv);
-    $('.outer').append(hoverDiv);
-         
-    $('.hover-div').one('click', '.custom-icon-button', function(evt) {
-        // Best shits
+              $imgDiv.find('.face').one('click', function(e) {
+                  
+                  e.preventDefault();
+                  var flipDiv = $(this).closest('.flip-img');
+                  var zeButtonFront = $(this).closest('.front');
+                  var zeButtonBack = $(this).closest('.back');
+                  var imagePath = $zeImg.attr('src');
+
+                  flipDiv.attr('data-clicked', 'true');
+
+                  //If image path has more than one _, then this link.replace(/_.$/g, ""))
+                  if (underscoreIsPath(imagePath)) {
+                      imagePath = imagePath.replace(/\.jpg/g, "");
+                  } else {
+                      imagePath = imagePath.replace(/(_[a-z])(\.jpg+)$/g, "");
+                  }
+
+                  chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) {
+                        console.log('got a message');
+                      if (req) {
+                          zeButtonFront.css({'background-image': 'url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/check-32.png")'});
+                          zeButtonBack.css({'background-image': 'url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/check-32.png")'});
+                      }
+                  });
+
+                  getNativeDimensions(imagePath, parseImg);
+
+              }); 
+              return false;
+          }
+        });
+
+        console.log($imgDiv.find('.face.back').length);
+
+
+    });
+
+    $('body').on('mouseleave', '.outer', function() {
+        $(this).children('div').hide();
     });
 
 });

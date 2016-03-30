@@ -16,6 +16,7 @@ $('#login').submit(function (e) {
 });
 
 chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) { 
+  console.log('received message');
   chrome.storage.sync.get(function(value) {
     $.ajax({
       method: 'POST',
@@ -23,6 +24,7 @@ chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) {
       url: 'https://localhost:3000/addedphotos',
       dataType: 'json'
     }).done(function(res) {
+      console.log('send post req');
       chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         chrome.tabs.sendMessage(tabs[0].id, { 'res': res });
       });
