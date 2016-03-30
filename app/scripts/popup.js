@@ -105,6 +105,16 @@ $('#login').submit(function (e) {
     dataType: 'json'
   }).done(function(id) {
     chrome.storage.sync.set({ 'user_id': id });
+    chrome.storage.sync.get('user_id', function(value) {
+      if (value['user_id']) {
+        $('#loginform').hide();
+        $('#loggedInContainer').show();
+      }
+      else {
+        return;
+      }
+    });
   });
+
 });
 
