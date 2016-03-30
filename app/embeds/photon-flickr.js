@@ -96,7 +96,15 @@ $(function(){
             var zeButtonBack = flipDiv.find('.back');
             var zeElem = $imgDiv.closest('.photo-list-photo-view');
             var styleAttrib = zeElem.attr('style');
-            var imagePath = (createPhotoUrl(styleAttrib).replace(/"/g, ""));
+            if (styleAttrib) {
+                var imagePath = (createPhotoUrl(styleAttrib).replace(/"/g, ""));
+            }
+            else {
+                // This case covers special a tags under "Trending"
+                var zeElem = (flipDiv.closest('.photo-list-photo-interaction-view')).siblings('a').children('.photo');
+                var styleAttrib = zeElem.attr('style');
+                var imagePath = (createPhotoUrl(styleAttrib).replace(/'/g, ""));
+            }
 
             flipDiv.attr('data-clicked', 'true');
 
@@ -109,8 +117,8 @@ $(function(){
 
             chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) {
                 if (req) {
-                    zeButtonFront.css({'background-image': 'url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/check-32.png")'});
-                    zeButtonBack.css({'background-image': 'url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/check-32.png")'});
+                    zeButtonFront.css({'background-image': 'url("chrome-extension://hijnoccjmdgleaafippfiocophahkhkl/images/check-32.png")'});
+                    zeButtonBack.css({'background-image': 'url("chrome-extension://hijnoccjmdgleaafippfiocophahkhkl/images/check-32.png")'});
                 }
             });
 
