@@ -1,7 +1,8 @@
 'use strict';
 
 $(function(){
-       
+    
+    // Add button animation
     function addZeButton($imgDiv) {
         $imgDiv.prepend($('<div>', { class: 'flip' }));
         var $cardContainer = $imgDiv.children('.flip');
@@ -10,6 +11,7 @@ $(function(){
         $cardContainer.children('.card').append($('<div>', { class: 'face back' }));
     }
 
+    // Parses the style tag in Flickr's embedded html
     function cleanUpStyle(styleAttrib) {
         var parts = styleAttrib.split("; ");
         var obj = {};
@@ -30,7 +32,7 @@ $(function(){
     }
 
     // Determines if last underscore in url before .jpg is part of path or just an image size modifier
-    function underscoreIsPath(imagePath) {
+    function underscoresInPath(imagePath) {
        var underScoreFragment = imagePath.substring(imagePath.lastIndexOf("_") + 1, imagePath.lastIndexOf("."));
         // Flickr uses convention _ +  a letter to resize images via url
         return underScoreFragment.length > 1;
@@ -89,8 +91,8 @@ $(function(){
 
             flipDiv.attr('data-clicked', 'true');
 
-            //If image path has more than one _, then this link.replace(/_.$/g, ""))
-            if (underscoreIsPath(imagePath)) {
+            //If image path has more than one _, then take out the last _ and replace
+            if (underscoresInPath(imagePath)) {
                 imagePath = imagePath.replace(/\.jpg/g, "");
             } else {
                 imagePath = imagePath.replace(/(_[a-z])(\.jpg+)$/g, "");
@@ -98,8 +100,8 @@ $(function(){
 
             chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) {
                 if (req) {
-                    zeButtonFront.css({'background-image': 'url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/check-32.png")'});
-                    zeButtonBack.css({'background-image': 'url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/check-32.png")'});
+                    zeButtonFront.css({'background-image': 'url("chrome-extension://hijnoccjmdgleaafippfiocophahkhkl/images/check-32.png")'});
+                    zeButtonBack.css({'background-image': 'url("chrome-extension://hijnoccjmdgleaafippfiocophahkhkl/images/check-32.png")'});
                 }
             });
 

@@ -1,3 +1,5 @@
+'use strict';
+
 $(function() {
 
     // Determines if last underscore in url before .jpg is part of path or just an image size modifier
@@ -40,8 +42,7 @@ $(function() {
     $('body').on('mouseenter', 'img', function() {
         var $zeImg = $(this);
         var outerDiv = $('<div>').addClass('outer');
-        if ($(this).closest('.outer').length === 0) {
-            console.log('no outer div');
+        if (($zeImg[0].width > MIN_WIDTH && $zeImg[0].height > MIN_HEIGHT) && ($zeImg.closest('.outer').length === 0)) {
             $(this).wrap(outerDiv);
         }
         var $imgDiv = $(this).closest('.outer');
@@ -59,8 +60,6 @@ $(function() {
             return;
           } else {
               $(this).children(".card-img").toggleClass("flipped");
-              // return false; 
-
               $imgDiv.find('.face').one('click', function(e) {
                   
                   e.preventDefault();
@@ -79,7 +78,6 @@ $(function() {
                   }
 
                   chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) {
-                        console.log('got a message');
                       if (req) {
                           zeButtonFront.css({'background-image': 'url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/check-32.png")'});
                           zeButtonBack.css({'background-image': 'url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/check-32.png")'});
@@ -92,9 +90,6 @@ $(function() {
               return false;
           }
         });
-
-        console.log($imgDiv.find('.face.back').length);
-
 
     });
 
