@@ -76,6 +76,12 @@ $(function() {
       chrome.runtime.reload();       
     });
 
+    $.ajax({
+      method: 'GET',
+      url: 'https://localhost:3000/logout',
+      dataType: 'json'
+    })
+
     $('#loginform').show();
     $('#loggedInContainer').hide();
 
