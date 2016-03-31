@@ -23,7 +23,7 @@ hr {
 
 .button-link {
   padding-bottom: 3px;
-  margin-left: 10%;
+  margin-left: 4%;
   margin-right: 10%;
   margin-top: 5px;
   text-align: center;
@@ -60,7 +60,7 @@ hr {
 }
 
 #loginform {
-  height: 200px;
+  height: 300px;
   width: 200px;
   display: flex;
   flex-direction: column;
@@ -82,3 +82,16 @@ hr {
 #loggedInContainer p {
     font-size: 2em;
   }
+
+#local {
+  width: 120px;
+}
+
+#clickme {
+  height: 20px;
+}
+
+p {
+  font-size: 150%;
+  text-align: center;
+}
