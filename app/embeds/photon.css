@@ -1,3 +1,9 @@
+.make-invis {
+  visibility: hidden;
+  position: fixed;
+  z-index: -100;
+}
+
 .outer {
   position: relative;
 }
@@ -67,13 +73,13 @@
 .flip-img .card-img .front {
   position: absolute;
   z-index: 1;
-  background-image: url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/logo-38.png");
+  background-image: url("chrome-extension://hijnoccjmdgleaafippfiocophahkhkl/images/logo-38.png");
   background-repeat: no-repeat;
   color: white;
   cursor: pointer;
 }
 .flip-img .card-img .back {
-  background-image: url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/plus-38.png");
+  background-image: url("chrome-extension://hijnoccjmdgleaafippfiocophahkhkl/images/plus-38.png");
   background-repeat: no-repeat;
   color: black;
   cursor: pointer;

@@ -1,3 +1,9 @@
+.make-invis {
+  visibility: hidden;
+  position: fixed;
+  z-index: -100;
+}
+
 .flip {
   -webkit-perspective: 800;
   -ms-perspective: 800;
@@ -56,13 +62,13 @@
 .flip .card .front {
   position: absolute;
   z-index: 1;
-  background-image: url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/logo-50.png");
+  background-image: url("chrome-extension://hijnoccjmdgleaafippfiocophahkhkl/images/logo-50.png");
   background-repeat: no-repeat;
   color: white;
   cursor: pointer;
 }
 .flip .card .back {
-  background-image: url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/plus-50.png");
+  background-image: url("chrome-extension://hijnoccjmdgleaafippfiocophahkhkl/images/plus-50.png");
   background-repeat: no-repeat;
   color: black;
   cursor: pointer;
