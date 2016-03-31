@@ -104,7 +104,7 @@ $(function() {
 
   // Local Login
 
-$('#login').submit(function (e) {
+$('#local').on('submit', function (e) {
   e.preventDefault();
   console.log('hello world');
   var email = $('#email').val();
