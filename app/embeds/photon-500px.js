@@ -1,12 +1,8 @@
 $(function() {
 
-  const logoWidth = 32;
+  const logoWidth = 50;
   const horizontalDistanceFromWindow = 11;
   const verticalDistanceFromWindow = 2;
-
-  // function addZeButton($imgLink) {
-  //   var newButton = $imgLink.prepend($('<div>', {class: 'custom-icon-button'})); 
-  // }
 
   function checkICanHazHttps(imagePath) {
     if (imagePath.match(/https/g) || imagePath.match(/http/g)) {
@@ -114,8 +110,8 @@ $(function() {
 
         chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) {
             if (req) {
-                zeButtonFront.css({'background-image': 'url("chrome-extension://hijnoccjmdgleaafippfiocophahkhkl/images/check-32.png")'});
-                zeButtonBack.css({'background-image': 'url("chrome-extension://hijnoccjmdgleaafippfiocophahkhkl/images/check-32.png")'});
+                zeButtonFront.css({'background-image': 'url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/check-50.png")'});
+                zeButtonBack.css({'background-image': 'url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/check-50.png")'});
             }
         });
 
@@ -170,8 +166,8 @@ $(function() {
 
         chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) {
             if (req) {
-                zeButtonFront.css({'background-image': 'url("chrome-extension://hijnoccjmdgleaafippfiocophahkhkl/images/check-32.png")'});
-                zeButtonBack.css({'background-image': 'url("chrome-extension://hijnoccjmdgleaafippfiocophahkhkl/images/check-32.png")'});
+                zeButtonFront.css({'background-image': 'url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/check-50.png")'});
+                zeButtonBack.css({'background-image': 'url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/check-50.png")'});
             }
         });
 
