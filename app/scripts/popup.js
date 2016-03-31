@@ -44,7 +44,13 @@ $(function() {
         dataType: 'json'
       }).done(function(id) {
         chrome.storage.sync.set({ 'user_id': id, 'numLikedPhotos': 0 });
-        
+
+        // Refresh the page so content_script will add button
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+          chrome.tabs.executeScript(tabs[0].id, { code: 'window.location.reload()' });
+          chrome.runtime.reload();         
+        });
+
         chrome.storage.sync.get('user_id', function(value) {
           if (value['user_id']) {
             $('#loginform').hide();
@@ -60,17 +66,23 @@ $(function() {
 
   // Log out
   $('#logmeout').click(function (e) {
-    
     e.preventDefault();
+    // Refresh the page so content_script will remove button
+    
     chrome.storage.sync.clear();
-    chrome.runtime.reload();
+    // chrome.runtime.reload();
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+      chrome.tabs.executeScript(tabs[0].id, { code: 'window.location.reload()' }); 
+      chrome.runtime.reload();       
+    });
+
     $('#loginform').show();
     $('#loggedInContainer').hide();
+
   });
 
   // Sends photo url & image specs to current user's db table
   chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) { 
-    console.log(req.url);
     chrome.storage.sync.get(function(value) {
       $.ajax({
         method: 'POST',
@@ -106,7 +118,6 @@ $(function() {
 
 $('#local').on('submit', function (e) {
   e.preventDefault();
-  console.log('hello world');
   var email = $('#email').val();
   var password = $('#password').val();
   $.ajax ({
@@ -116,6 +127,13 @@ $('#local').on('submit', function (e) {
     dataType: 'json'
   }).done(function(id) {
     chrome.storage.sync.set({ 'user_id': id, 'numLikedPhotos': 0 });
+
+    // Refresh the page so content_script will add button
+    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+      chrome.tabs.executeScript(tabs[0].id, { code: 'window.location.reload()' });
+      chrome.runtime.reload();               
+    });
+
     chrome.storage.sync.get(function(value) {
       if (value['user_id']) {
         $('#loginform').hide();

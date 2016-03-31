@@ -2,44 +2,54 @@
 
 $(function() {
 
-    function checkICanHazHttps(imagePath) {
-      if (imagePath.match(/https/g) || imagePath.match(/http/g)) {
-        return imagePath;
-      }
-      else {
-        imagePath = 'https' + imagePath;
-        return imagePath;
-      }
+  chrome.storage.sync.get(function(value) {
+    if (value['user_id']) {
+      addZeHoverEffect();
+    } else {
+      removeZeButtonz();
     }
+  });
 
-    function getNativeDimensions(imagePath, callback) {
-        var completePath = checkICanHazHttps(imagePath);
-        var output = {
-            url: completePath,
-            width: 0,
-            height: 0
-        };
-        var $img = $('<img>').attr({
-            src: completePath,
-            id: 'photonParseSizeTarget'
-        });
-        $img.addClass('make-invis');
-        $('body').append($img);
-        $img.on('load', function(){
-            var $zeImg = $(this);
-            output.width = $zeImg.width();
-            output.height = $zeImg.height();
-            $(this).remove();
-            callback(output);
-        });
+  function checkICanHazHttps(imagePath) {
+    if (imagePath.match(/https/g) || imagePath.match(/http/g)) {
+      return imagePath;
     }
-
-    function parseImg(imgObj) {
-        chrome.runtime.sendMessage({ url: imgObj.url, width: imgObj.width, height: imgObj.height });
+    else {
+      imagePath = 'https' + imagePath;
+      return imagePath;
     }
+  }
 
-    const MIN_WIDTH = 100;
-    const MIN_HEIGHT = 100;
+  function getNativeDimensions(imagePath, callback) {
+      var completePath = checkICanHazHttps(imagePath);
+      var output = {
+          url: completePath,
+          width: 0,
+          height: 0
+      };
+      var $img = $('<img>').attr({
+          src: completePath,
+          id: 'photonParseSizeTarget'
+      });
+      $img.addClass('make-invis');
+      $('body').append($img);
+      $img.on('load', function(){
+          var $zeImg = $(this);
+          output.width = $zeImg.width();
+          output.height = $zeImg.height();
+          $(this).remove();
+          callback(output);
+      });
+  }
+
+  function parseImg(imgObj) {
+      chrome.runtime.sendMessage({ url: imgObj.url, width: imgObj.width, height: imgObj.height });
+  }
+
+  const MIN_WIDTH = 100;
+  const MIN_HEIGHT = 100;
+
+  function addZeHoverEffect() {
 
     $('body').on('mouseenter', 'img', function() {
       var $zeImg = $(this);
@@ -80,6 +90,7 @@ $(function() {
     $('body').on('mouseleave', '.outer', function() {
         $(this).children('div').hide();
     });
+  }
 
   function handleClick($imgDiv, $zeImg) {
 
@@ -101,5 +112,9 @@ $(function() {
 
       getNativeDimensions(imagePath, parseImg);
     });
+  }
+
+  function removeZeButtonz() {
+    $('.outer').remove();
   }
 });
