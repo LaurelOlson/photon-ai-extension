@@ -18,6 +18,8 @@ $(function() {
       $('#loginform').show();
       $('#loggedInContainer').hide();
     }
+    console.log(value['numLikedPhotos']);
+    $('h1').text(value['numLikedPhotos']) || $('h1').text(0);
   });
 
   // Facebook Login
@@ -41,7 +43,7 @@ $(function() {
         url: 'https://localhost:3000/login/ext/facebook',
         dataType: 'json'
       }).done(function(id) {
-        chrome.storage.sync.set({ 'user_id': id });
+        chrome.storage.sync.set({ 'user_id': id, 'numLikedPhotos': 0 });
         
         chrome.storage.sync.get('user_id', function(value) {
           if (value['user_id']) {
@@ -79,8 +81,16 @@ $(function() {
 
         // Lets content scripts know that photo was saved so that it can update add-photo-button state
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-          chrome.tabs.sendMessage(tabs[0].id, { 'res': res });
+          chrome.tabs.sendMessage(tabs[0].id, { 'res': res });        
         });
+
+        // Increment num of photos saved
+        chrome.storage.sync.get(function(value) {
+          var numPhotosSaved = value['numLikedPhotos'];
+          numPhotosSaved++;  
+          chrome.storage.sync.set({'numLikedPhotos': numPhotosSaved});
+        });
+        
       });
     }); 
   });
@@ -105,10 +115,11 @@ $('#login').submit(function (e) {
     url: 'https://localhost:3000/login/ext',
     dataType: 'json'
   }).done(function(id) {
-    chrome.storage.sync.set({ 'user_id': id });
-    chrome.storage.sync.get('user_id', function(value) {
+    chrome.storage.sync.set({ 'user_id': id, 'numLikedPhotos': 0 });
+    chrome.storage.sync.get(function(value) {
       if (value['user_id']) {
         $('#loginform').hide();
+        $('h1').text(value['numLikedPhotos']);
         $('#loggedInContainer').show();
       }
       else {
