@@ -116,7 +116,7 @@ $(function() {
 
   // Local Login
 
-$('#local').on('submit', function (e) {
+$('#login').submit(function (e) {
   e.preventDefault();
   var email = $('#email').val();
   var password = $('#password').val();
