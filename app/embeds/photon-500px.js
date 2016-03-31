@@ -1,8 +1,18 @@
+'use strict';
+
 $(function() {
 
   const logoWidth = 50;
   const horizontalDistanceFromWindow = 11;
   const verticalDistanceFromWindow = 2;
+
+  chrome.storage.sync.get(function(value) {
+    if (value['user_id']) {
+      addZeHoverEffect();
+    } else {
+      removeZeButtonz();
+    }
+  });
 
   function checkICanHazHttps(imagePath) {
     if (imagePath.match(/https/g) || imagePath.match(/http/g)) {
@@ -67,114 +77,120 @@ $(function() {
     $cardContainer.children('.card').append($('<div>', { class: 'face back' }));
   }
 
-
   // Home page stuff
-  $('body').on('mouseenter', '.link', function() {
 
-    var $imgLink = $(this).closest('.lazy-hidden');
-    if ($imgLink.find('.flip').length === 0) {
-      addZeButton($imgLink);
-      $imgLink.find('.custom-icon-button').css({
-        'top': '-10px',
-        'right': ($(this).width() - logoWidth - horizontalDistanceFromWindow) + 'px'
-      });
-    } else {
-      $imgLink.children('.flip').children('div').show();
-    }
+  function addZeHoverEffect() {
+    $('body').on('mouseenter', '.link', function() {
 
-    $(".flip").hover(function(){
-      if ($(this).data('clicked')) {
-        return;
-      } else {
-          $(this).find(".card").addClass("flipped");
-          return false;  
-      }
-    }, function() {
-      if ($(this).data('clicked')) {
-        return;
-      } else {
-          $(this).find(".card").removeClass("flipped");
-          return false;  
-      }
-    });
-
-    $imgLink.find('.flip').one('click', function() {
-        var flipDiv = $(this);
-        var zeButtonFront = flipDiv.find('.face .front');
-        var zeButtonBack = flipDiv.find('.back');
-        var zeElem = flipDiv.closest('.lazy-hidden');
-        var styleAttrib = zeElem.attr('style');
-        var imagePath = (createPhotoUrl(styleAttrib)).replace(/"/g, "");
-
-        flipDiv.attr('data-clicked', 'true');
-
-        chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) {
-            if (req) {
-                zeButtonFront.css({'background-image': 'url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/check-50.png")'});
-                zeButtonBack.css({'background-image': 'url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/check-50.png")'});
-            }
+      var $imgLink = $(this).closest('.lazy-hidden');
+      if ($imgLink.find('.flip').length === 0) {
+        addZeButton($imgLink);
+        $imgLink.find('.custom-icon-button').css({
+          'top': '-10px',
+          'right': ($(this).width() - logoWidth - horizontalDistanceFromWindow) + 'px'
         });
+      } else {
+        $imgLink.children('.flip').children('div').show();
+      }
 
-        getNativeDimensions(imagePath, parseImg);
-
-    });
-
-  });
-
-  $('body').on('mouseleave', '.photo.lazy-hidden', function() {
-    $(this).children('.flip').children('div').hide();
-  });
-
-  //Discover page stuff
-
-  $('body').on('mouseenter', '.photo_link', function () {
-    var $imgLink = $(this).siblings('.photo_thumbnail__pulse_container');
-    if ($imgLink.find('.flip').length === 0) {
-      addZeButton($imgLink);
-      $imgLink.find('.custom-icon-button').css({
-        'top': '-10px',
-        'right': ($(this).width() - logoWidth - horizontalDistanceFromWindow) + 'px'
+      $(".flip").hover(function(){
+        if ($(this).data('clicked')) {
+          return;
+        } else {
+            $(this).find(".card").addClass("flipped");
+            return false;  
+        }
+      }, function() {
+        if ($(this).data('clicked')) {
+          return;
+        } else {
+            $(this).find(".card").removeClass("flipped");
+            return false;  
+        }
       });
-    } else {
-      $imgLink.children('.flip').children('div').show();
-    }
 
-    $(".flip").hover(function(){
-      if ($(this).data('clicked')) {
-        return;
-      } else {
-          $(this).find(".card").addClass("flipped");
-          return false;  
-      }
-    }, function() {
-      if ($(this).data('clicked')) {
-        return;
-      } else {
-          $(this).find(".card").removeClass("flipped");
-          return false;  
-      }
+      $imgLink.find('.flip').one('click', function() {
+          var flipDiv = $(this);
+          var zeButtonFront = flipDiv.find('.face .front');
+          var zeButtonBack = flipDiv.find('.back');
+          var zeElem = flipDiv.closest('.lazy-hidden');
+          var styleAttrib = zeElem.attr('style');
+          var imagePath = (createPhotoUrl(styleAttrib)).replace(/"/g, "");
+
+          flipDiv.attr('data-clicked', 'true');
+
+          chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) {
+              if (req) {
+                  zeButtonFront.css({'background-image': 'url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/check-50.png")'});
+                  zeButtonBack.css({'background-image': 'url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/check-50.png")'});
+              }
+          });
+
+          getNativeDimensions(imagePath, parseImg);
+
+      });
+
     });
 
-    $imgLink.find('.flip').one('click', function() {
-        var flipDiv = $(this);
-        var zeButtonFront = flipDiv.find('.face .front');
-        var zeButtonBack = flipDiv.find('.back');
-        var zeElem = $imgLink.siblings('.photo_link').children('img');
-        var imagePath = (zeElem.attr('src')).replace(/"/g, "");
+    $('body').on('mouseleave', '.photo.lazy-hidden', function() {
+      $(this).children('.flip').children('div').hide();
+    });
 
-        flipDiv.attr('data-clicked', 'true');
+    //Discover page stuff
 
-        chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) {
-            if (req) {
-                zeButtonFront.css({'background-image': 'url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/check-50.png")'});
-                zeButtonBack.css({'background-image': 'url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/check-50.png")'});
-            }
+    $('body').on('mouseenter', '.photo_link', function () {
+      var $imgLink = $(this).siblings('.photo_thumbnail__pulse_container');
+      if ($imgLink.find('.flip').length === 0) {
+        addZeButton($imgLink);
+        $imgLink.find('.custom-icon-button').css({
+          'top': '-10px',
+          'right': ($(this).width() - logoWidth - horizontalDistanceFromWindow) + 'px'
         });
+      } else {
+        $imgLink.children('.flip').children('div').show();
+      }
 
-        getNativeDimensions(imagePath, parseImg);
+      $(".flip").hover(function(){
+        if ($(this).data('clicked')) {
+          return;
+        } else {
+            $(this).find(".card").addClass("flipped");
+            return false;  
+        }
+      }, function() {
+        if ($(this).data('clicked')) {
+          return;
+        } else {
+            $(this).find(".card").removeClass("flipped");
+            return false;  
+        }
+      });
 
+      $imgLink.find('.flip').one('click', function() {
+          var flipDiv = $(this);
+          var zeButtonFront = flipDiv.find('.face .front');
+          var zeButtonBack = flipDiv.find('.back');
+          var zeElem = $imgLink.siblings('.photo_link').children('img');
+          var imagePath = (zeElem.attr('src')).replace(/"/g, "");
+
+          flipDiv.attr('data-clicked', 'true');
+
+          chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) {
+              if (req) {
+                  zeButtonFront.css({'background-image': 'url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/check-50.png")'});
+                  zeButtonBack.css({'background-image': 'url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/check-50.png")'});
+              }
+          });
+
+          getNativeDimensions(imagePath, parseImg);
+
+      });
     });
-  });
+  }
+
+  function removeZeButtonz() {
+    $('.flip').remove();
+  }
 
   // Still need to handle grabbing imgs from individual profile gallery
 

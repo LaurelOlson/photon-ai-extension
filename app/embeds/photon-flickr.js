@@ -1,6 +1,14 @@
 'use strict';
 
 $(function(){
+
+    chrome.storage.sync.get(function(value) {
+      if (value['user_id']) {
+        monitorHover();
+      } else {
+        removeZeButtonz();
+      }
+    });
     
     // Add button animation
     function addZeButton($imgDiv) {
@@ -64,67 +72,72 @@ $(function(){
         chrome.runtime.sendMessage({ url: imgObj.url, width: imgObj.width, height: imgObj.height });
     }
 
-    // Body selector case for images wrapped in 'a' tags
-    $('body').on('mouseenter', '.overlay', function() {
-        var $imgDiv = $(this).closest('.photo-list-photo-interaction');
-        if ($imgDiv.find('.flip').length !== 0) {
-            return;
-        } else {
-            addZeButton($imgDiv);
-        }
-
-        $(".flip").hover(function(){
-          if ($(this).data('clicked')) {
-            return;
-          } else {
-              $(this).find(".card").addClass("flipped");
-              return false;  
-          }
-        }, function() {
-          if ($(this).data('clicked')) {
-            return;
-          } else {
-              $(this).find(".card").removeClass("flipped");
-              return false;  
-          }
-
-        });
-
-        $imgDiv.find('.flip').one('click', function() {
-            var flipDiv = $(this);
-            var zeButtonFront = flipDiv.find('.face .front');
-            var zeButtonBack = flipDiv.find('.back');
-            var zeElem = $imgDiv.closest('.photo-list-photo-view');
-            var styleAttrib = zeElem.attr('style');
-            if (styleAttrib) {
-                var imagePath = (createPhotoUrl(styleAttrib).replace(/"/g, ""));
-            }
-            else {
-                // This case covers special a tags under "Trending"
-                var zeElem = (flipDiv.closest('.photo-list-photo-interaction-view')).siblings('a').children('.photo');
-                var styleAttrib = zeElem.attr('style');
-                var imagePath = (createPhotoUrl(styleAttrib).replace(/'/g, ""));
-            }
-
-            flipDiv.attr('data-clicked', 'true');
-
-            //If image path has more than one _, then take out the last _ and replace
-            if (underscoresInPath(imagePath)) {
-                imagePath = imagePath.replace(/\.jpg/g, "");
+    function monitorHover() {
+        // Body selector case for images wrapped in 'a' tags
+        $('body').on('mouseenter', '.overlay', function() {
+            var $imgDiv = $(this).closest('.photo-list-photo-interaction');
+            if ($imgDiv.find('.flip').length !== 0) {
+                return;
             } else {
-                imagePath = imagePath.replace(/(_[a-z])(\.jpg+)$/g, "");
+                addZeButton($imgDiv);
             }
 
-            chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) {
-                if (req) {
-                    zeButtonFront.css({'background-image': 'url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/check-38.png")'});
-                    zeButtonBack.css({'background-image': 'url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/check-38.png")'});
-                }
+            $(".flip").hover(function(){
+              if ($(this).data('clicked')) {
+                return;
+              } else {
+                  $(this).find(".card").addClass("flipped");
+                  return false;  
+              }
+            }, function() {
+              if ($(this).data('clicked')) {
+                return;
+              } else {
+                  $(this).find(".card").removeClass("flipped");
+                  return false;  
+              }
+
             });
 
-            getNativeDimensions(imagePath, parseImg);
+            $imgDiv.find('.flip').one('click', function() {
+                var flipDiv = $(this);
+                var zeButtonFront = flipDiv.find('.face .front');
+                var zeButtonBack = flipDiv.find('.back');
+                var zeElem = $imgDiv.closest('.photo-list-photo-view');
+                var styleAttrib = zeElem.attr('style');
+                if (styleAttrib) {
+                    var imagePath = (createPhotoUrl(styleAttrib).replace(/"/g, ""));
+                }
+                else {
+                    // This case covers special a tags under "Trending"
+                    var zeElem = (flipDiv.closest('.photo-list-photo-interaction-view')).siblings('a').children('.photo');
+                    var styleAttrib = zeElem.attr('style');
+                    var imagePath = (createPhotoUrl(styleAttrib).replace(/'/g, ""));
+                }
 
+                flipDiv.attr('data-clicked', 'true');
+
+                //If image path has more than one _, then take out the last _ and replace
+                if (underscoresInPath(imagePath)) {
+                    imagePath = imagePath.replace(/\.jpg/g, "");
+                } else {
+                    imagePath = imagePath.replace(/(_[a-z])(\.jpg+)$/g, "");
+                }
+
+                chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) {
+                    if (req) {
+                        zeButtonFront.css({'background-image': 'url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/check-38.png")'});
+                        zeButtonBack.css({'background-image': 'url("chrome-extension://dmeifbfaplnedddldbeflojbbeeeejlm/images/check-38.png")'});
+                    }
+                });
+
+                getNativeDimensions(imagePath, parseImg);
+
+            });
         });
-    });
+    }
 
+    function removeZeButtonz() {
+      $('.outer').remove();
+    }
 });
