@@ -4,7 +4,7 @@
 $(function(){
 
     // remember to change this in css too (i.e. for div dimensions)!
-    const iconWidth = 38;
+    const ICON_WIDTH = 38;
 
     // on document ready, check if user is logged in, then display the button accordingly
     chrome.storage.sync.get(function(value) {
@@ -17,8 +17,8 @@ $(function(){
     
     // Add button animation
     function addZeButton($imgContainer) {
-        var logoURL = chrome.extension.getURL('images/logo-' + iconWidth + '.png');
-        var plusURL = chrome.extension.getURL('images/plus-' + iconWidth + '.png');
+        var logoURL = chrome.extension.getURL('images/logo-' + ICON_WIDTH + '.png');
+        var plusURL = chrome.extension.getURL('images/plus-' + ICON_WIDTH + '.png');
         var $cardFront = $('<div>').addClass('face front').css({ 'background-image': 'url("' + logoURL + '")' });
         var $cardBack = $('<div>').addClass('face back').css({ 'background-image': 'url("' + plusURL + '")' });
 
@@ -122,7 +122,7 @@ $(function(){
         $imgContainer.find('.flip').one('click', function() {
             var $flipDiv = $(this);
             var $zeButtonBack = $flipDiv.find('.face.back');
-            var checkURL = chrome.extension.getURL('/images/check-' + iconWidth + '.png');
+            var checkURL = chrome.extension.getURL('/images/check-' + ICON_WIDTH + '.png');
             var imagePath;
             if (styleAttrib) {
                 imagePath = (createPhotoUrl(styleAttrib).replace(/"/g, ""));

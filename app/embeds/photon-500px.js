@@ -3,7 +3,7 @@
 
 $(function() {
 
-  const iconWidth = 50;
+  const ICON_WIDTH = 50;
 
   // on document ready, checks if user is logged in, then displays the button accordingly
   // should also add a check to see what tab we're on so we only execute one addHoverEffect() function
@@ -94,8 +94,8 @@ $(function() {
 
   // adds the photonAI button to the image container
   function addZeButton($imgContainer) {
-    var logoURL = chrome.extension.getURL('images/logo-' + iconWidth + '.png');
-    var plusURL = chrome.extension.getURL('images/plus-' + iconWidth + '.png');
+    var logoURL = chrome.extension.getURL('images/logo-' + ICON_WIDTH + '.png');
+    var plusURL = chrome.extension.getURL('images/plus-' + ICON_WIDTH + '.png');
     var $cardFront = $('<div>').addClass('face front').css({ 'background-image': 'url("' + logoURL + '")' });
     var $cardBack = $('<div>').addClass('face back').css({ 'background-image': 'url("' + plusURL + '")' });
 
@@ -109,7 +109,7 @@ $(function() {
   function addClickListener($imgContainer, imagePath) { 
     $imgContainer.find('.flip').one('click', function() {
       var $zeButtonBack = $(this).find('.face.back');
-      var checkURL = chrome.extension.getURL('/images/check-' + iconWidth + '.png');
+      var checkURL = chrome.extension.getURL('/images/check-' + ICON_WIDTH + '.png');
 
       $(this).attr('data-clicked', 'true');
 
